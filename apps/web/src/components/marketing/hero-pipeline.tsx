@@ -88,14 +88,14 @@ export function HeroPipeline({ className }: { className?: string }) {
     if (reduce) return;
     const id = window.setInterval(() => {
       setIndex((i) => (i + 1) % SCENES.length);
-    }, 2000);
+    }, 4000);
     return () => window.clearInterval(id);
   }, []);
 
   return (
     <div
       className={cn(
-        "relative flex h-full min-h-[420px] flex-col overflow-hidden rounded-xl border border-border bg-surface shadow-[0_24px_80px_-32px_rgba(0,0,0,0.85)]",
+        "relative flex min-h-[22rem] flex-col overflow-hidden rounded-xl border border-border bg-surface sm:min-h-[24rem]",
         className,
       )}
       aria-live="polite"
@@ -127,8 +127,8 @@ export function HeroPipeline({ className }: { className?: string }) {
         </span>
       </div>
 
-      <div className="grid min-h-0 flex-1 md:grid-cols-[1.15fr_0.85fr]">
-        <div className="space-y-2.5 border-b border-border p-4 md:border-r md:border-b-0 md:p-5">
+      <div className="grid md:grid-cols-[1.15fr_0.85fr]">
+        <div className="space-y-2.5 border-b border-border p-3.5 sm:p-4 md:border-r md:border-b-0 md:p-4">
           <FlowStep label="AGENT" value={scene.agent} active />
           <Connector />
           <FlowStep
@@ -168,7 +168,7 @@ export function HeroPipeline({ className }: { className?: string }) {
           </div>
         </div>
 
-        <div className="flex flex-col space-y-3 p-4 font-mono text-xs md:p-5">
+        <div className="flex flex-col gap-3 p-3.5 font-mono text-xs sm:p-4 md:p-4">
           <Row k="Policy" v={scene.policy} />
           <Row
             k="Risk"
@@ -195,7 +195,7 @@ export function HeroPipeline({ className }: { className?: string }) {
           />
           <div
             className={cn(
-              "mt-auto rounded-md border px-3 py-2.5 text-[11px] transition-colors duration-500",
+              "rounded-md border px-3 py-2 text-[11px] transition-colors duration-500",
               scene.stage === "blocked" && "border-danger/40 text-danger",
               scene.stage === "approved" && "border-ok/40 text-ok",
               (scene.stage === "decision" || scene.stage === "risk") &&

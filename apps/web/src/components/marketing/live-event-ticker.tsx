@@ -22,36 +22,45 @@ export function LiveEventTicker({ className }: { className?: string }) {
       typeof window !== "undefined" &&
       window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduce) return;
-    const id = window.setInterval(() => setOffset((n) => (n + 1) % EVENTS.length), 1800);
+    const id = window.setInterval(
+      () => setOffset((n) => (n + 1) % EVENTS.length),
+      3500,
+    );
     return () => window.clearInterval(id);
   }, []);
 
-  const visible = [...EVENTS, ...EVENTS].slice(offset, offset + 4);
+  const visible = [...EVENTS, ...EVENTS].slice(offset, offset + 3);
 
   return (
     <div
       className={cn(
-        "overflow-hidden border-y border-border bg-surface/80 backdrop-blur-sm",
+        "overflow-hidden border-y border-border bg-surface/80",
         className,
       )}
       aria-label="Sample security event stream"
     >
-      <div className="mx-auto flex max-w-7xl items-stretch">
-        <div className="flex shrink-0 items-center gap-2 border-r border-border px-4 py-2.5">
+      <div className="mx-auto flex w-full max-w-6xl items-stretch px-0 sm:px-0">
+        <div className="flex shrink-0 items-center gap-2 border-r border-border px-3 py-2 sm:px-4">
           <span className="h-1.5 w-1.5 rounded-full bg-ok animate-pulse-line" />
-          <span className="font-mono text-[10px] tracking-[0.16em] text-muted uppercase">
-            Live feed
+          <span className="font-mono text-[10px] tracking-[0.14em] text-muted uppercase">
+            Feed
           </span>
         </div>
-        <div className="flex min-w-0 flex-1 gap-0 overflow-hidden">
+        <div className="flex min-w-0 flex-1 overflow-hidden">
           {visible.map((e, idx) => (
             <div
               key={`${e.t}-${e.action}-${idx}`}
-              className="flex min-w-0 flex-1 items-center gap-3 border-r border-border px-4 py-2.5 font-mono text-[11px] last:border-r-0"
+              className={cn(
+                "flex min-w-0 items-center gap-2 border-r border-border px-3 py-2 font-mono text-[10px] last:border-r-0 sm:gap-3 sm:px-4 sm:text-[11px]",
+                idx === 0 ? "flex-[1.2]" : "hidden flex-1 sm:flex",
+                idx > 1 && "hidden lg:flex",
+              )}
             >
               <span className="shrink-0 text-muted">{e.t}</span>
               <span className="truncate text-foreground/80">{e.agent}</span>
-              <span className="hidden truncate text-muted sm:inline">{e.action}</span>
+              <span className="hidden truncate text-muted md:inline">
+                {e.action}
+              </span>
               <span
                 className={cn(
                   "ml-auto shrink-0 tracking-wide",

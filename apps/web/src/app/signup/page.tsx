@@ -9,9 +9,9 @@ export default async function SignupPage() {
   if (user) redirect("/app");
 
   return (
-    <main className="grid min-h-screen bg-sentinel-atmosphere lg:grid-cols-2">
-      <div className="relative flex flex-col justify-center px-6 py-10 sm:px-10 lg:px-14 xl:px-20">
-        <div className="absolute inset-x-0 top-0 flex items-center justify-between px-6 py-5 sm:px-10 lg:px-14 xl:px-20">
+    <main className="grid min-h-svh bg-sentinel-atmosphere lg:grid-cols-2">
+      <div className="relative flex flex-col px-4 py-6 sm:px-8 lg:px-12">
+        <div className="flex items-center justify-between">
           <Link
             href="/"
             className="font-display text-lg font-bold tracking-tight"
@@ -20,43 +20,31 @@ export default async function SignupPage() {
           </Link>
           <Link
             href="/login"
-            className="font-mono text-[11px] tracking-wide text-muted transition-colors hover:text-foreground"
+            className="text-sm text-muted transition-colors hover:text-foreground"
           >
-            Sign in →
+            Sign in
           </Link>
         </div>
 
-        <div className="mx-auto w-full max-w-md pt-8">
-          <p className="font-mono text-[10px] tracking-[0.18em] text-muted uppercase">
-            Provision org
-          </p>
-          <h1 className="mt-3 font-display text-3xl font-bold tracking-tight sm:text-4xl">
+        <div className="mx-auto flex w-full max-w-sm flex-1 flex-col justify-center py-10 sm:py-14">
+          <h1 className="font-display text-3xl font-bold tracking-tight">
             Create account
           </h1>
           <p className="mt-2 text-sm text-muted">
-            Free to start. No credit card. No paid AI required.
+            Free to start. No credit card required.
           </p>
-
-          <div className="mt-8 rounded-xl border border-border bg-surface/80 p-5 sm:p-6">
-            <div className="mb-5 flex items-center justify-between gap-3 border-b border-border pb-3">
-              <span className="font-mono text-[10px] tracking-wide text-muted uppercase">
-                New organization
-              </span>
-              <span className="font-mono text-[10px] text-muted">v0.1</span>
-            </div>
+          <div className="mt-7">
             <SignupForm />
           </div>
         </div>
       </div>
 
-      <div className="relative hidden p-6 lg:block lg:p-8">
-        <AuthGatePanel className="h-full min-h-[calc(100vh-4rem)] rounded-2xl" />
+      <div className="hidden min-h-svh p-4 lg:block lg:p-5">
+        <AuthGatePanel className="h-full rounded-2xl" />
       </div>
 
-      <div className="border-t border-border px-6 py-5 lg:hidden">
-        <div className="overflow-hidden rounded-xl">
-          <AuthGatePanel className="min-h-[240px]" />
-        </div>
+      <div className="border-t border-border p-4 lg:hidden">
+        <AuthGatePanel className="min-h-[12rem] rounded-xl" />
       </div>
     </main>
   );

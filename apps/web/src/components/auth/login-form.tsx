@@ -40,12 +40,12 @@ export function LoginForm() {
         </p>
       ) : null}
       <Button type="submit" className="w-full" disabled={pending}>
-        {pending ? "Authenticating…" : "Enter control plane"}
+        {pending ? "Signing in…" : "Sign in"}
       </Button>
       <p className="text-center text-sm text-muted">
         No account?{" "}
         <Link href="/signup" className="text-foreground underline-offset-4 hover:underline">
-          Start free
+          Create one
         </Link>
       </p>
     </form>

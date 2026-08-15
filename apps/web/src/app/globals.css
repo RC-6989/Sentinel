@@ -112,11 +112,9 @@ body {
 @keyframes sentinel-word-roll {
   from {
     opacity: 0;
-    transform: translateY(40%);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
   }
 }
 
@@ -164,7 +162,7 @@ body {
 }
 
 .animate-word-roll {
-  animation: sentinel-word-roll 0.45s ease-out both;
+  animation: sentinel-word-roll 0.35s ease-out both;
 }
 
 .animate-marquee {
