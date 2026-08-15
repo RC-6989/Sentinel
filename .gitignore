@@ -60,3 +60,6 @@ venv/
 tmp/
 temp/
 .sentinel/
+.data/
+*.sqlite
+*.sqlite-journal

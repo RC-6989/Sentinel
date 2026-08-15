@@ -1,12 +1,18 @@
 @import "tailwindcss";
 
 :root {
-  --background: #07080a;
-  --foreground: #e8eaed;
-  --muted: #8b929a;
-  --border: #1c2128;
+  --background: #060708;
+  --foreground: #eef0f3;
+  --muted: #8a929c;
+  --border: #1a1f27;
+  --surface: #0b0e13;
+  --surface-raised: #10141b;
   --accent: #3d8bfd;
+  --accent-soft: rgba(61, 139, 253, 0.14);
   --ok: #3dd68c;
+  --warn: #e3b341;
+  --danger: #f85149;
+  --glow: rgba(61, 139, 253, 0.22);
 }
 
 @theme inline {
@@ -14,16 +20,125 @@
   --color-foreground: var(--foreground);
   --color-muted: var(--muted);
   --color-border: var(--border);
+  --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
   --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
   --color-ok: var(--ok);
+  --color-warn: var(--warn);
+  --color-danger: var(--danger);
   --font-sans: var(--font-sans);
   --font-mono: var(--font-mono);
+  --font-display: var(--font-display);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans), ui-sans-serif, sans-serif;
+}
+
+::selection {
+  background: rgba(61, 139, 253, 0.35);
+  color: #fff;
+}
+
+.font-display {
+  font-family: var(--font-display), var(--font-sans), ui-sans-serif, sans-serif;
+}
+
+/* Atmosphere: grid + radial wash — marketing surfaces only */
+.bg-sentinel-atmosphere {
+  background-color: var(--background);
+  background-image:
+    radial-gradient(ellipse 80% 55% at 50% -15%, var(--glow), transparent 55%),
+    radial-gradient(ellipse 40% 30% at 90% 20%, rgba(61, 253, 180, 0.06), transparent 50%),
+    linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size:
+    auto,
+    auto,
+    48px 48px,
+    48px 48px;
+  background-position: center top, right top, center, center;
+}
+
+@keyframes sentinel-shimmer {
+  0% {
+    background-position: 100% center;
+  }
+  100% {
+    background-position: -100% center;
+  }
+}
+
+@keyframes sentinel-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes sentinel-pulse-line {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes sentinel-scan {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  20% {
+    opacity: 0.5;
+  }
+  100% {
+    transform: translateY(220%);
+    opacity: 0;
+  }
+}
+
+.text-shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--muted) 0%,
+    var(--foreground) 40%,
+    var(--muted) 80%
+  );
+  background-size: 200% auto;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  animation: sentinel-shimmer 2.4s linear infinite;
+}
+
+.animate-fade-up {
+  animation: sentinel-fade-up 0.7s ease-out both;
+}
+
+.animate-fade-up-delay-1 {
+  animation: sentinel-fade-up 0.7s ease-out 0.12s both;
+}
+
+.animate-fade-up-delay-2 {
+  animation: sentinel-fade-up 0.7s ease-out 0.24s both;
+}
+
+.animate-pulse-line {
+  animation: sentinel-pulse-line 1.8s ease-in-out infinite;
+}
+
+.animate-scan {
+  animation: sentinel-scan 3.2s ease-in-out infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -33,5 +148,11 @@ body {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+
+  .text-shimmer {
+    background: none;
+    color: var(--muted);
+    -webkit-text-fill-color: unset;
   }
 }

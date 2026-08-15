@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { getDb } from "@/lib/db";
 
 export const dynamic = "force-dynamic";
 
@@ -13,9 +14,22 @@ export function GET() {
     process.env.NODE_ENV ??
     "development";
 
-  return NextResponse.json({
-    status: "ok",
-    version,
-    environment,
-  });
+  let database: "ok" | "error" = "ok";
+  try {
+    getDb().prepare("SELECT 1 AS ok").get();
+  } catch {
+    database = "error";
+  }
+
+  const status = database === "ok" ? "ok" : "degraded";
+
+  return NextResponse.json(
+    {
+      status,
+      version,
+      environment,
+      checks: { database },
+    },
+    { status: database === "ok" ? 200 : 503 },
+  );
 }

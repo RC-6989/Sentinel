@@ -6,10 +6,18 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added
+
+- Phase 1 SaaS foundation: signup/login, organizations, projects, dashboard shell
+- Local SQLite persistence via `node:sqlite` (D1-compatible schema)
+- Marketing landing with animated Sentinel pipeline preview
+- Settings: profile, org details, create project/organization
+- Explicit "not available yet" pages for Agents–Incidents (no fake success)
+
 ### Planned
 
-- Phase 1: SaaS foundation (auth, orgs, projects, dashboard shell)
-- Phase 2+: Agent management, tools, gateway, policies, approvals, SDKs
+- Phase 2: Agent management + API keys
+- Phase 3+: Tools, gateway, policies, approvals, SDKs
 
 ## [0.1.0] — 2026-08-14
 
