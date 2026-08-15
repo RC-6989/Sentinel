@@ -77,7 +77,7 @@ const SCENES: Array<{
   },
 ];
 
-export function HeroPipeline() {
+export function HeroPipeline({ className }: { className?: string }) {
   const [index, setIndex] = useState(0);
   const scene = SCENES[index]!;
 
@@ -88,42 +88,47 @@ export function HeroPipeline() {
     if (reduce) return;
     const id = window.setInterval(() => {
       setIndex((i) => (i + 1) % SCENES.length);
-    }, 2200);
+    }, 2000);
     return () => window.clearInterval(id);
   }, []);
 
   return (
     <div
-      className="relative overflow-hidden border-y border-border bg-surface"
+      className={cn(
+        "relative flex h-full min-h-[420px] flex-col overflow-hidden rounded-xl border border-border bg-surface shadow-[0_24px_80px_-32px_rgba(0,0,0,0.85)]",
+        className,
+      )}
       aria-live="polite"
     >
       <div
-        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent/50 to-transparent"
+        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent/60 to-transparent"
         aria-hidden
       />
       <div
-        className="pointer-events-none absolute inset-y-0 left-1/3 w-px bg-accent/20 animate-scan"
+        className="pointer-events-none absolute inset-y-0 left-[38%] w-px overflow-hidden"
         aria-hidden
-      />
+      >
+        <div className="h-16 w-full bg-gradient-to-b from-transparent via-accent/50 to-transparent animate-scan" />
+      </div>
 
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-3">
+      <div className="flex items-center justify-between border-b border-border px-4 py-2.5">
         <div className="flex items-center gap-2">
           <span className="h-1.5 w-1.5 rounded-full bg-ok animate-pulse-line" />
           <span className="font-mono text-[11px] tracking-wide text-muted uppercase">
-            Sentinel pipeline
+            Pipeline
           </span>
         </div>
         <span className="font-mono text-[11px] text-muted">
           {scene.stage === "tool_call" || scene.stage === "policy" ? (
             <TextShimmer>intercepting</TextShimmer>
           ) : (
-            "live preview"
+            "preview"
           )}
         </span>
       </div>
 
-      <div className="mx-auto grid max-w-6xl gap-0 border-t border-border md:grid-cols-[1.15fr_0.85fr]">
-        <div className="space-y-3 border-b border-border p-5 md:border-r md:border-b-0 md:p-6">
+      <div className="grid min-h-0 flex-1 md:grid-cols-[1.15fr_0.85fr]">
+        <div className="space-y-2.5 border-b border-border p-4 md:border-r md:border-b-0 md:p-5">
           <FlowStep label="AGENT" value={scene.agent} active />
           <Connector />
           <FlowStep
@@ -152,12 +157,9 @@ export function HeroPipeline() {
             />
             <Mini
               label="RISK"
-              active={[
-                "risk",
-                "decision",
-                "approved",
-                "blocked",
-              ].includes(scene.stage)}
+              active={["risk", "decision", "approved", "blocked"].includes(
+                scene.stage,
+              )}
             />
             <Mini
               label="SECURITY"
@@ -166,7 +168,7 @@ export function HeroPipeline() {
           </div>
         </div>
 
-        <div className="space-y-3 p-5 font-mono text-xs md:p-6">
+        <div className="flex flex-col space-y-3 p-4 font-mono text-xs md:p-5">
           <Row k="Policy" v={scene.policy} />
           <Row
             k="Risk"
@@ -193,7 +195,7 @@ export function HeroPipeline() {
           />
           <div
             className={cn(
-              "mt-4 rounded-md border px-3 py-2.5 text-[11px] transition-colors duration-500",
+              "mt-auto rounded-md border px-3 py-2.5 text-[11px] transition-colors duration-500",
               scene.stage === "blocked" && "border-danger/40 text-danger",
               scene.stage === "approved" && "border-ok/40 text-ok",
               (scene.stage === "decision" || scene.stage === "risk") &&
@@ -231,7 +233,7 @@ function FlowStep({
   return (
     <div
       className={cn(
-        "rounded-md border px-3 py-2.5 transition-colors duration-300",
+        "rounded-md border px-3 py-2 transition-colors duration-300",
         active ? "border-border bg-surface-raised" : "border-transparent opacity-50",
         highlight && "border-accent/40 bg-accent-soft",
       )}
@@ -261,10 +263,7 @@ function Mini({ label, active }: { label: string; active: boolean }) {
 
 function Connector() {
   return (
-    <div
-      className="mx-4 h-3 w-px bg-border animate-pulse-line"
-      aria-hidden
-    />
+    <div className="mx-4 h-2.5 w-px bg-border animate-pulse-line" aria-hidden />
   );
 }
 

@@ -47,20 +47,22 @@ body {
   font-family: var(--font-display), var(--font-sans), ui-sans-serif, sans-serif;
 }
 
-/* Atmosphere: grid + radial wash — marketing surfaces only */
+/* Atmosphere: denser grid + radial wash — marketing / auth surfaces */
 .bg-sentinel-atmosphere {
   background-color: var(--background);
   background-image:
-    radial-gradient(ellipse 80% 55% at 50% -15%, var(--glow), transparent 55%),
-    radial-gradient(ellipse 40% 30% at 90% 20%, rgba(61, 253, 180, 0.06), transparent 50%),
-    linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+    radial-gradient(ellipse 90% 60% at 50% -20%, var(--glow), transparent 58%),
+    radial-gradient(ellipse 45% 35% at 95% 10%, rgba(61, 253, 180, 0.07), transparent 50%),
+    radial-gradient(ellipse 35% 40% at 0% 60%, rgba(61, 139, 253, 0.06), transparent 55%),
+    linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
   background-size:
     auto,
     auto,
-    48px 48px,
-    48px 48px;
-  background-position: center top, right top, center, center;
+    auto,
+    40px 40px,
+    40px 40px;
+  background-position: center top, right top, left center, center, center;
 }
 
 @keyframes sentinel-shimmer {
@@ -107,6 +109,26 @@ body {
   }
 }
 
+@keyframes sentinel-word-roll {
+  from {
+    opacity: 0;
+    transform: translateY(40%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes sentinel-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
 .text-shimmer {
   background: linear-gradient(
     90deg,
@@ -122,15 +144,15 @@ body {
 }
 
 .animate-fade-up {
-  animation: sentinel-fade-up 0.7s ease-out both;
+  animation: sentinel-fade-up 0.55s ease-out both;
 }
 
 .animate-fade-up-delay-1 {
-  animation: sentinel-fade-up 0.7s ease-out 0.12s both;
+  animation: sentinel-fade-up 0.55s ease-out 0.08s both;
 }
 
 .animate-fade-up-delay-2 {
-  animation: sentinel-fade-up 0.7s ease-out 0.24s both;
+  animation: sentinel-fade-up 0.55s ease-out 0.16s both;
 }
 
 .animate-pulse-line {
@@ -139,6 +161,15 @@ body {
 
 .animate-scan {
   animation: sentinel-scan 3.2s ease-in-out infinite;
+}
+
+.animate-word-roll {
+  animation: sentinel-word-roll 0.45s ease-out both;
+}
+
+.animate-marquee {
+  width: max-content;
+  animation: sentinel-marquee 28s linear infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -154,5 +185,9 @@ body {
     background: none;
     color: var(--muted);
     -webkit-text-fill-color: unset;
+  }
+
+  .animate-marquee {
+    animation: none;
   }
 }

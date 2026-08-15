@@ -40,7 +40,7 @@ export function LoginForm() {
         </p>
       ) : null}
       <Button type="submit" className="w-full" disabled={pending}>
-        {pending ? "Signing in…" : "Sign in"}
+        {pending ? "Authenticating…" : "Enter control plane"}
       </Button>
       <p className="text-center text-sm text-muted">
         No account?{" "}
