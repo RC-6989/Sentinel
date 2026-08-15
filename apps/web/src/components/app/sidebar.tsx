@@ -49,7 +49,7 @@ export function AppSidebar({
   const nav = (
     <>
       <div className="border-b border-border px-4 py-4">
-        <Link href="/" className="font-mono text-xs tracking-[0.18em] uppercase">
+        <Link href="/" className="font-display text-sm font-bold tracking-tight">
           Sentinel
         </Link>
         <div className="mt-3">
@@ -107,7 +107,7 @@ export function AppSidebar({
   return (
     <>
       <div className="flex items-center justify-between border-b border-border px-4 py-3 lg:hidden">
-        <span className="font-mono text-xs tracking-[0.18em] uppercase">
+        <span className="font-display text-sm font-bold tracking-tight">
           Sentinel
         </span>
         <button

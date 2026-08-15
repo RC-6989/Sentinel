@@ -19,7 +19,7 @@ export function Button({
         size === "lg" && "h-11 px-5 text-sm",
         variant === "primary" && "bg-accent text-white hover:bg-[#2f7ae5]",
         variant === "secondary" &&
-          "border border-border bg-[#0d1117] text-foreground hover:border-[#30363d]",
+          "border border-border bg-surface-raised text-foreground hover:border-[#30363d]",
         variant === "ghost" && "text-muted hover:bg-white/5 hover:text-foreground",
         variant === "danger" && "bg-[#da3633] text-white hover:bg-[#b62324]",
         className,
