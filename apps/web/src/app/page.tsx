@@ -2,6 +2,7 @@ import Link from "next/link";
 import { AgentElementsShowcase } from "@/components/marketing/agent-elements-showcase";
 import { HeroPipeline } from "@/components/marketing/hero-pipeline";
 import { LiveEventTicker } from "@/components/marketing/live-event-ticker";
+import { WaitlistForm } from "@/components/marketing/waitlist-form";
 import { WordRoll } from "@/components/marketing/word-roll";
 import { Button } from "@/components/ui/button";
 
@@ -23,14 +24,8 @@ export default function HomePage() {
             >
               How it works
             </Link>
-            <Link
-              href="/login"
-              className="text-sm text-muted transition-colors hover:text-foreground"
-            >
-              Sign in
-            </Link>
-            <Link href="/signup">
-              <Button size="sm">Get started</Button>
+            <Link href="#waitlist">
+              <Button size="sm">Join the waitlist</Button>
             </Link>
           </nav>
         </div>
@@ -51,8 +46,8 @@ export default function HomePage() {
                 tool call.
               </p>
               <div className="animate-fade-up-delay-2 mt-6 flex flex-wrap gap-2.5">
-                <Link href="/signup">
-                  <Button size="lg">Get started</Button>
+                <Link href="#waitlist">
+                  <Button size="lg">Join the waitlist</Button>
                 </Link>
                 <Link href="#how-it-works">
                   <Button size="lg" variant="secondary">
@@ -153,17 +148,18 @@ await sentinel.protect(toolCall, {
             </pre>
           </div>
 
-          <div className="flex flex-col justify-center rounded-xl border border-border bg-surface px-5 py-7 sm:px-7">
+          <div
+            id="waitlist"
+            className="flex scroll-mt-16 flex-col justify-center rounded-xl border border-border bg-surface px-5 py-7 sm:px-7"
+          >
             <h2 className="font-display text-xl font-bold tracking-tight sm:text-2xl">
-              Protect your first agent
+              Join the waitlist
             </h2>
             <p className="mt-2 text-sm leading-relaxed text-muted">
-              Create an organization and open the dashboard.
+              Early access for teams securing real agents. No spam.
             </p>
             <div className="mt-5">
-              <Link href="/signup">
-                <Button size="lg">Create organization</Button>
-              </Link>
+              <WaitlistForm size="lg" />
             </div>
           </div>
         </section>
