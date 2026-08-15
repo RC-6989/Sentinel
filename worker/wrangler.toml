@@ -1,0 +1,11 @@
+# Cloudflare Worker (future)
+
+name = "sentinel-api"
+main = "src/index.ts"
+compatibility_date = "2025-08-01"
+
+# Uncomment and configure after creating a D1 database (manual Wrangler steps):
+# [[d1_databases]]
+# binding = "DB"
+# database_name = "sentinel"
+# database_id = "<from wrangler d1 create>"

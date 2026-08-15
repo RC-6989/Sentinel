@@ -1,0 +1,21 @@
+{
+  "name": "sentinel",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Sentinel — AI Agent Security Control Plane",
+  "packageManager": "pnpm@10.27.0",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "dev": "pnpm --filter @sentinel/web dev",
+    "build": "pnpm -r --filter @sentinel/web build",
+    "lint": "pnpm -r --if-present lint",
+    "typecheck": "pnpm -r --if-present typecheck",
+    "test": "pnpm -r --if-present test",
+    "health": "curl -s http://localhost:3000/api/health || echo \"Start the app with pnpm dev first\""
+  },
+  "devDependencies": {
+    "typescript": "^5.8.3"
+  }
+}

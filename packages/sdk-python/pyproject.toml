@@ -1,0 +1,13 @@
+[project]
+name = "sentinel-sdk"
+version = "0.1.0"
+description = "Python SDK for Sentinel AI agent security control plane"
+requires-python = ">=3.10"
+readme = "README.md"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["sentinel_sdk*"]
