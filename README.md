@@ -2,6 +2,8 @@
 
 **Control what your AI agents can do.**
 
+**Landing page live at http://trysentinelapp.vercel.app
+
 Sentinel is a security control plane that sits between AI agents and the tools/data they can access. It intercepts tool calls, evaluates deterministic policies and risk, blocks unauthorized actions, pauses dangerous actions for human approval, detects suspicious content, records an audit trail, and identifies abnormal agent behavior.
 
 ## Core promise
