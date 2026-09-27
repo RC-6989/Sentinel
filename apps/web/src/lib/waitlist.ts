@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { getDb, newId } from "@/lib/db";
+import { getDb, newId } from "./db";
 
 const emailSchema = z.string().trim().email().max(254);
 
@@ -55,20 +55,18 @@ export async function joinWaitlist(rawEmail: string): Promise<WaitlistResult> {
   if (process.env.VERCEL) {
     return {
       ok: false,
-      error: "Waitlist is not configured. Set WAITLIST_WEBHOOK_URL.",
+      error: "The waitlist is temporarily unavailable. Please try again later.",
     };
   }
 
   // Local / non-Vercel: persist to SQLite.
   try {
     const db = ensureWaitlistTable();
-    try {
-      db.prepare(
-        "INSERT INTO waitlist_signups (id, email) VALUES (?, ?)",
-      ).run(newId("wl"), email);
-    } catch {
-      // Unique email — already on the list counts as success.
-    }
+    // Only duplicate email addresses count as an existing successful signup.
+    // Other storage errors must reach the error state shown by the form.
+    db.prepare(
+      "INSERT INTO waitlist_signups (id, email) VALUES (?, ?) ON CONFLICT(email) DO NOTHING",
+    ).run(newId("wl"), email);
     return { ok: true };
   } catch {
     return { ok: false, error: "Could not save your email. Try again." };

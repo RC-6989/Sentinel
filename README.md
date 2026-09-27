@@ -12,7 +12,7 @@ Defense in depth for autonomous agents — without requiring paid LLM inference 
 
 ## Status
 
-Phase 2 implemented locally: authentication, organizations/projects, agent management, and scoped API keys. The Worker gateway is still a stub; tool registration is next. See [PROJECT.md](./PROJECT.md) and [CHANGELOG.md](./CHANGELOG.md).
+Phase 3 implemented locally: authentication, organizations/projects, agents, scoped API keys, and a tool registry with risk classification and JSON Schema input validation. The Worker gateway is still a stub; execution is next (Phase 4). See [PROJECT.md](./PROJECT.md) and [CHANGELOG.md](./CHANGELOG.md).
 
 ## Stack (planned)
 
@@ -66,7 +66,7 @@ Copy `.env.example` to `apps/web/.env.local`. Never commit secrets.
 
 Local development exposes `/signup`, `/login`, and `/app`. Production remains in waitlist mode unless `SENTINEL_WAITLIST_MODE=false` is explicitly set. The dashboard currently requires a persistent local SQLite filesystem; it is not ready for serverless deployment.
 
-See [agent and API key setup](docs/agents.md) for usage and verification.
+See [agent and API key setup](docs/agents.md) and [tool registration and input validation](docs/tools.md) for usage and verification. Fonts are bundled locally, so builds do not need access to Google Fonts.
 
 ## Cost & constraints
 

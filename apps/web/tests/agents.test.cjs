@@ -7,7 +7,7 @@ const path = require('node:path');
 const dir = mkdtempSync(path.join(tmpdir(), 'sentinel-agents-'));
 process.env.SENTINEL_DATA_DIR = dir;
 const { getDb, hashToken } = require('../.test-build/db.js');
-const { createOrganization, listProjects } = require('../.test-build/orgs.js');
+const { createOrganization, listProjects, listOrganizationsForUser, getOrganizationForUser } = require('../.test-build/orgs.js');
 const { createAgent, updateAgent, listAgents, listApiKeys, issueApiKey, revokeApiKey, authenticateApiKey, AgentInputError } = require('../.test-build/agents.js');
 const db = getDb();
 for (const id of ['owner', 'other', 'member', 'admin']) {
@@ -29,6 +29,10 @@ test('creates agent with project environment and permits member reads', () => {
   assert.equal(row.id, agent);
   assert.equal(row.environment, 'development');
   assert.equal(row.description, 'Description');
+  // React rejects null-prototype SQLite rows as client component props.
+  for (const record of [row, project, listOrganizationsForUser('owner')[0], getOrganizationForUser('owner', org.id)]) {
+    assert.equal(Object.getPrototypeOf(record), Object.prototype);
+  }
 });
 
 test('rejects cross-tenant reads, writes, keys, and project references', () => {
@@ -62,6 +66,7 @@ test('keys authenticate only their bound identity and never appear in storage or
   assert.equal(stored.token_hash, hashToken(key.token));
   assert.ok(!JSON.stringify(stored).includes(key.token));
   assert.ok(!JSON.stringify(listApiKeys('owner', org.id)).includes(stored.token_hash));
+  assert.equal(Object.getPrototypeOf(listApiKeys('owner', org.id)[0]), Object.prototype);
   assert.ok(!JSON.stringify(db.prepare('SELECT * FROM audit_logs').all()).includes(key.token));
   assert.equal(authenticateApiKey(`${key.token.slice(0, -1)}z`), null);
   assert.equal(authenticateApiKey('snt_' + '0'.repeat(64)), null);

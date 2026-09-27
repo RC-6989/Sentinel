@@ -24,7 +24,7 @@ import { Button } from "@/components/ui/button";
 const NAV = [
   { href: "/app", label: "Overview", icon: LayoutDashboard },
   { href: "/app/agents", label: "Agents", icon: Bot },
-  { href: "/app/tools", label: "Tools", icon: Wrench, soon: true },
+  { href: "/app/tools", label: "Tools", icon: Wrench },
   { href: "/app/policies", label: "Policies", icon: ScrollText, soon: true },
   { href: "/app/approvals", label: "Approvals", icon: CheckSquare, soon: true },
   { href: "/app/activity", label: "Activity", icon: Activity, soon: true },

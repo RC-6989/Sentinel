@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useId } from "react";
 import {
   waitlistAction,
   type WaitlistActionState,
@@ -19,6 +19,8 @@ export function WaitlistForm({
   size?: "md" | "lg";
 }) {
   const [state, action, pending] = useActionState(waitlistAction, initial);
+  const emailId = useId();
+  const errorId = `${emailId}-error`;
 
   if (state.ok) {
     return (
@@ -29,13 +31,14 @@ export function WaitlistForm({
         )}
         role="status"
       >
-        You are on the list. We will email you when access opens.
+        You’re on the waitlist. Your email has been saved for early-access updates.
       </p>
     );
   }
 
   return (
-    <form action={action} className={cn("w-full", className)}>
+    <form action={action} className={cn("w-full", className)} aria-busy={pending}>
+      <label htmlFor={emailId} className="mb-2 block text-sm font-medium">Email address</label>
       <div
         className={cn(
           "flex w-full flex-col gap-2 sm:flex-row sm:items-stretch",
@@ -43,12 +46,15 @@ export function WaitlistForm({
         )}
       >
         <Input
+          id={emailId}
           name="email"
           type="email"
           autoComplete="email"
           required
           placeholder="you@company.com"
-          aria-label="Email"
+          maxLength={254}
+          aria-invalid={state.error ? true : undefined}
+          aria-describedby={state.error ? errorId : undefined}
           className={cn(size === "lg" && "h-11")}
         />
         <Button
@@ -61,7 +67,7 @@ export function WaitlistForm({
         </Button>
       </div>
       {state.error ? (
-        <p className="mt-2 text-sm text-danger" role="alert">
+        <p id={errorId} className="mt-2 text-sm text-danger" role="alert">
           {state.error}
         </p>
       ) : null}

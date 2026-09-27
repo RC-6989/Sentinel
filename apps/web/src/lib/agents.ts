@@ -49,15 +49,17 @@ function agentForOrg(organizationId: string, agentId: string) {
 
 export function listAgents(userId: string, organizationId: string): Agent[] {
   authorize(userId, organizationId);
-  return getDb().prepare(`SELECT a.*, p.name AS project_name, p.environment
+  const rows = getDb().prepare(`SELECT a.*, p.name AS project_name, p.environment
     FROM agents a JOIN projects p ON p.id = a.project_id AND p.organization_id = a.organization_id
     WHERE a.organization_id = ? ORDER BY a.created_at DESC, a.id`).all(organizationId) as Agent[];
+  return rows.map(row => ({ ...row }));
 }
 
 export function listApiKeys(userId: string, organizationId: string): ApiKey[] {
   authorize(userId, organizationId);
-  return getDb().prepare(`SELECT id, agent_id, name, token_prefix, expires_at, revoked_at, created_at
+  const rows = getDb().prepare(`SELECT id, agent_id, name, token_prefix, expires_at, revoked_at, created_at
     FROM api_keys WHERE organization_id = ? ORDER BY created_at DESC, id`).all(organizationId) as ApiKey[];
+  return rows.map(row => ({ ...row }));
 }
 
 export function createAgent(userId: string, organizationId: string, projectId: string, name: string, description: string) {

@@ -1,177 +1,114 @@
 import Link from "next/link";
-import { AgentElementsShowcase } from "@/components/marketing/agent-elements-showcase";
-import { HeroPipeline } from "@/components/marketing/hero-pipeline";
-import { LiveEventTicker } from "@/components/marketing/live-event-ticker";
+import { ArrowDown, ArrowRight, ArrowUpRight } from "lucide-react";
+import { ToolCallExample } from "@/components/marketing/tool-call-example";
 import { WaitlistForm } from "@/components/marketing/waitlist-form";
-import { WordRoll } from "@/components/marketing/word-roll";
-import { Button } from "@/components/ui/button";
+
+const workflow = [
+  { title: "Route the tool call", body: "Your agent sends a tool request to Sentinel before it reaches the underlying API. Only calls routed through Sentinel are in scope." },
+  { title: "Check your rules", body: "The planned policy engine checks the tool, its arguments, and the environment against rules your team defines." },
+  { title: "Decide before execution", body: "Allow the request, deny it, or hold it for human review. The planned audit trail records the decision and its reason." },
+];
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen bg-sentinel-atmosphere text-foreground">
-      <header className="border-b border-border/80">
-        <div className="mx-auto flex w-full max-w-6xl items-center justify-between gap-4 px-4 py-3.5 sm:px-6">
-          <Link
-            href="/"
-            className="font-display text-lg font-bold tracking-tight"
-          >
+    <div className="marketing-page">
+      <a className="skip-link" href="#main-content">Skip to content</a>
+      <header className="site-header">
+        <div className="marketing-container header-inner">
+          <Link href="/" className="wordmark" aria-label="Sentinel home">
+            <span className="brand-mark" aria-hidden="true">s</span>
             Sentinel
           </Link>
-          <nav className="flex items-center gap-3">
-            <Link
-              href="#how-it-works"
-              className="hidden text-sm text-muted transition-colors hover:text-foreground sm:inline"
-            >
-              How it works
-            </Link>
-            <Link href="#waitlist">
-              <Button size="sm">Join the waitlist</Button>
-            </Link>
+          <nav className="site-nav" aria-label="Main navigation">
+            <a href="#how-it-works">How it works</a>
+            <a href="#build-status">Build status</a>
+            <a href="#waitlist" className="nav-cta">Join the waitlist <ArrowUpRight size={15} aria-hidden="true" /></a>
           </nav>
         </div>
       </header>
 
-      <main>
-        <section className="mx-auto w-full max-w-6xl px-4 pt-8 sm:px-6 sm:pt-10 lg:pt-12">
-          <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,20.5rem)_minmax(0,1fr)] lg:gap-8 xl:grid-cols-[minmax(0,22rem)_minmax(0,1fr)]">
-            <div className="flex flex-col pt-0 lg:pt-1">
-              <h1 className="animate-fade-up font-display text-[2.75rem] font-bold leading-[0.95] tracking-tight sm:text-5xl lg:text-[3.5rem]">
-                Sentinel
-              </h1>
-              <p className="animate-fade-up-delay-1 mt-4 text-base font-medium tracking-tight text-foreground sm:text-lg">
-                Control agent <WordRoll /> before they run.
-              </p>
-              <p className="animate-fade-up-delay-2 mt-3 text-sm leading-relaxed text-muted">
-                Enforce policies, score risk, and require human approval on every
-                tool call.
-              </p>
-              <div className="animate-fade-up-delay-2 mt-6 flex flex-wrap gap-2.5">
-                <Link href="#waitlist">
-                  <Button size="lg">Join the waitlist</Button>
-                </Link>
-                <Link href="#how-it-works">
-                  <Button size="lg" variant="secondary">
-                    How it works
-                  </Button>
-                </Link>
-              </div>
+      <main id="main-content" tabIndex={-1}>
+        <section className="marketing-container hero" aria-labelledby="hero-title">
+          <div className="hero-copy">
+            <p className="eyebrow"><span className="status-marker" aria-hidden="true" /> AI agent tool governance</p>
+            <h1 id="hero-title">Give your agents<br />clear limits.</h1>
+            <p className="hero-description">Sentinel is being built to check AI agents’ tool calls against your rules, block disallowed actions, and hold sensitive requests for human approval.</p>
+            <div className="hero-actions">
+              <a href="#waitlist" className="marketing-button">Join the waitlist <ArrowUpRight size={18} aria-hidden="true" /></a>
+              <a href="#how-it-works" className="text-link">Explore the workflow <ArrowDown size={16} aria-hidden="true" /></a>
             </div>
-
-            <div className="animate-fade-up-delay-2 min-w-0">
-              <HeroPipeline />
-            </div>
+            <p className="hero-availability">In development. Tool-call enforcement is not available yet.</p>
           </div>
+          <ToolCallExample />
         </section>
 
-        <div className="mt-8 sm:mt-10">
-          <LiveEventTicker />
+        <div className="marketing-container architecture" aria-label="Planned architecture">
+          <p className="eyebrow">The intended path of a tool call</p>
+          <ol className="architecture-path">
+            <li><span>Your agent</span><small>Proposes an action</small></li>
+            <li className="architecture-gate"><span>Sentinel</span><small>Checks rules · returns a decision</small></li>
+            <li><span>Your tool or API</span><small>Runs an allowed action</small></li>
+          </ol>
         </div>
 
-        <section
-          id="how-it-works"
-          className="mx-auto w-full max-w-6xl scroll-mt-16 px-4 py-12 sm:px-6 sm:py-14"
-        >
-          <div className="grid gap-8 lg:grid-cols-[minmax(0,16rem)_minmax(0,1fr)] lg:gap-12">
-            <div>
-              <h2 className="font-display text-2xl font-bold tracking-tight sm:text-3xl">
-                Why Sentinel
-              </h2>
-              <p className="mt-3 text-sm leading-relaxed text-muted">
-                Agents can refund money, email customers, and call APIs. Sentinel
-                sits in front of those tools.
-              </p>
+        <section id="how-it-works" className="marketing-container editorial-section" aria-labelledby="workflow-title">
+          <div className="section-intro">
+            <p className="eyebrow">01 / The workflow</p>
+            <h2 id="workflow-title">A checkpoint before<br />the API call.</h2>
+            <p>A refund, an email, a database write. Each tool call is a concrete action with consequences. Sentinel’s planned gateway puts your rules at that boundary.</p>
+            <span className="plain-status">Planned functionality</span>
+          </div>
+          <ol className="workflow-list">
+            {workflow.map((step, index) => (
+              <li key={step.title}>
+                <span className="step-number" aria-hidden="true">0{index + 1}</span>
+                <div><h3>{step.title}</h3><p>{step.body}</p></div>
+              </li>
+            ))}
+          </ol>
+        </section>
+
+        <section id="build-status" className="status-section" aria-labelledby="status-title">
+          <div className="marketing-container editorial-section">
+            <div className="section-intro">
+              <p className="eyebrow">02 / Build status</p>
+              <h2 id="status-title">What’s here.<br />What’s next.</h2>
+              <p>Sentinel is in early development. The public site is a waitlist; the working foundation is available in local development.</p>
             </div>
-            <div className="divide-y divide-border border-y border-border">
-              {[
-                {
-                  title: "Policies",
-                  body: "Allow, deny, or require approval by tool, amount, and environment.",
-                },
-                {
-                  title: "Approvals",
-                  body: "Pause high-risk actions until a person reviews the call.",
-                },
-                {
-                  title: "Audit",
-                  body: "Log every decision and flag when an agent behaves unusually.",
-                },
-              ].map((item) => (
-                <div
-                  key={item.title}
-                  className="grid gap-1 py-3.5 sm:grid-cols-[7rem_1fr] sm:items-baseline sm:gap-6"
-                >
-                  <h3 className="text-sm font-medium">{item.title}</h3>
-                  <p className="text-sm leading-relaxed text-muted">
-                    {item.body}
-                  </p>
-                </div>
-              ))}
+            <div className="build-list">
+              <div className="build-row"><span className="build-label available">Available locally</span><div><h3>Agent and access management</h3><p>Accounts, organizations, projects, agent registration, and scoped API keys with rotation and revocation. Tool registration and input validation are also available locally.</p></div></div>
+              <div className="build-row"><span className="build-label">Next</span><div><h3>Execution gateway</h3><p>Route tool calls through Sentinel before they reach an API.</p></div></div>
+              <div className="build-row"><span className="build-label">Planned</span><div><h3>Policies, approvals, and audit</h3><p>Rule evaluation, human review, risk assessment, and a searchable history of tool-call decisions.</p></div></div>
+              <div className="build-row"><span className="build-label">Planned</span><div><h3>SDKs and detection</h3><p>TypeScript and Python integrations, suspicious-content checks, and behavioral monitoring.</p></div></div>
             </div>
           </div>
         </section>
 
-        <section
-          id="governance"
-          className="border-y border-border bg-surface/40 py-12 sm:py-14"
-        >
-          <div className="mx-auto w-full max-w-6xl px-4 sm:px-6">
-            <div className="max-w-xl">
-              <h2 className="font-display text-2xl font-bold tracking-tight sm:text-3xl">
-                What operators see
-              </h2>
-              <p className="mt-2 text-sm leading-relaxed text-muted">
-                Approvals, plans, and hard blocks when an agent tries something
-                risky.
-              </p>
-            </div>
-            <div className="mt-6 sm:mt-8">
-              <AgentElementsShowcase />
-            </div>
+        <section className="marketing-container editorial-section questions-section" aria-labelledby="questions-title">
+          <div className="section-intro">
+            <p className="eyebrow">03 / Before you integrate</p>
+            <h2 id="questions-title">Know the boundary.</h2>
+          </div>
+          <div className="question-list">
+            <details open><summary>Where would Sentinel sit in my stack?</summary><p>Between your agent runtime and the tools it calls. You would need to route those requests through the gateway. Calls made directly to an API would remain outside Sentinel’s control.</p></details>
+            <details><summary>Does it need an LLM to make decisions?</summary><p>The planned core uses deterministic rules, so policy decisions would not require a paid LLM API. Optional model-based detection is planned separately and would be disabled by default.</p></details>
+            <details><summary>Can I use it to protect production agents today?</summary><p>No. The execution gateway, policy enforcement, and human approval workflow are not implemented yet. The examples on this page illustrate the intended behavior.</p></details>
+            <details><summary>Will it catch every unsafe action?</summary><p>No. Sentinel is intended to be one layer of protection. It would still depend on the rules you configure and the tool calls you route through it. Tool permissions and application-level validation remain necessary.</p></details>
           </div>
         </section>
 
-        <section className="mx-auto grid w-full max-w-6xl gap-4 px-4 py-12 sm:px-6 sm:py-14 lg:grid-cols-2 lg:gap-5">
-          <div className="overflow-hidden rounded-xl border border-border bg-[#05070a]">
-            <div className="flex items-center justify-between border-b border-border px-4 py-2">
-              <span className="font-mono text-[10px] tracking-wide text-muted uppercase">
-                integrate.ts
-              </span>
-            </div>
-            <pre className="overflow-x-auto p-4 font-mono text-[12px] leading-relaxed text-foreground/85 sm:text-[13px]">
-              <code>{`import { sentinel } from "@sentinel/sdk";
-
-await sentinel.protect(toolCall, {
-  agent: "SupportBot",
-  policy: "refund-policy-01",
-});
-// → allow | deny | approval_required`}</code>
-            </pre>
-          </div>
-
-          <div
-            id="waitlist"
-            className="flex scroll-mt-16 flex-col justify-center rounded-xl border border-border bg-surface px-5 py-7 sm:px-7"
-          >
-            <h2 className="font-display text-xl font-bold tracking-tight sm:text-2xl">
-              Join the waitlist
-            </h2>
-            <p className="mt-2 text-sm leading-relaxed text-muted">
-              Early access for teams securing real agents. No spam.
-            </p>
-            <div className="mt-5">
-              <WaitlistForm size="lg" />
-            </div>
+        <section id="waitlist" className="waitlist-section" aria-labelledby="waitlist-title">
+          <div className="marketing-container waitlist-inner">
+            <div><p className="eyebrow">Follow the build</p><h2 id="waitlist-title">Building agents that<br />take real actions?</h2><p>Join the waitlist for updates on early access to Sentinel.</p></div>
+            <div className="waitlist-form-wrap"><WaitlistForm size="lg" /><p className="waitlist-note">Joining the list does not create an account or grant product access.</p></div>
           </div>
         </section>
       </main>
 
-      <footer className="border-t border-border px-4 py-5 sm:px-6">
-        <div className="mx-auto flex w-full max-w-6xl flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
-          <span className="font-display text-sm font-semibold tracking-tight">
-            Sentinel
-          </span>
-          <span className="text-xs text-muted">AI agent security · v0.1</span>
-        </div>
+      <footer className="site-footer marketing-container">
+        <Link href="/" className="wordmark">Sentinel</Link>
+        <p>Tool governance for AI agents. In development.</p>
+        <a className="text-link" href="#build-status">Build status <ArrowRight size={15} aria-hidden="true" /></a>
       </footer>
     </div>
   );

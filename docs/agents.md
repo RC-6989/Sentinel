@@ -49,4 +49,4 @@ The service tests use temporary databases and exercise the production service fu
 
 Manual smoke: sign up, create an agent, issue a key, check the identity endpoint, rotate the key (old key must fail), pause/resume, revoke, and reload the page to verify the secret is no longer displayed. Create another organization and verify its agent list is separate.
 
-Next phase: tool registry and JSON Schema validation, before gateway execution.
+Tool registration and JSON Schema validation are now available; see [Tools (Phase 3)](tools.md). Gateway execution is next (Phase 4).

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import { buttonStyles } from "@/components/ui/button";
 
 export function ComingSoon({
   title,
@@ -18,13 +18,11 @@ export function ComingSoon({
       <h1 className="mt-2 text-2xl font-semibold tracking-tight">{title}</h1>
       <p className="mt-3 text-sm leading-relaxed text-muted">{description}</p>
       <p className="mt-4 text-sm text-muted">
-        This page is intentionally marked unavailable — no fake success UI.
+        This feature is planned. You can manage agents and API keys from the overview.
       </p>
       <div className="mt-6">
-        <Link href="/app">
-          <Button size="sm" variant="secondary">
-            Back to overview
-          </Button>
+        <Link href="/app" className={buttonStyles({ size: "sm", variant: "secondary" })}>
+          Back to overview
         </Link>
       </div>
     </div>

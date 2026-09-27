@@ -9,6 +9,6 @@
     "rootDir": "src/lib",
     "plugins": []
   },
-  "include": ["src/lib/agents.ts", "src/lib/db.ts", "src/lib/orgs.ts", "src/types/node-sqlite.d.ts"],
+  "include": ["src/lib/agents.ts", "src/lib/tools.ts", "src/lib/tool-schema.ts", "src/lib/waitlist.ts", "src/lib/db.ts", "src/lib/orgs.ts", "src/types/node-sqlite.d.ts"],
   "exclude": ["node_modules", ".test-build"]
 }

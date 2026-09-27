@@ -31,7 +31,7 @@ export default async function SignupPage() {
             Create account
           </h1>
           <p className="mt-2 text-sm text-muted">
-            Free to start. No credit card required.
+            Create a workspace to register agents and manage their access.
           </p>
           <div className="mt-7">
             <SignupForm />

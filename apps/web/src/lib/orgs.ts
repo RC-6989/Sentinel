@@ -25,7 +25,9 @@ export function listOrganizationsForUser(userId: string): Organization[] {
        ORDER BY o.created_at ASC`,
     )
     .all(userId) as Organization[];
-  return rows;
+  // node:sqlite returns null-prototype rows, which React Server Components
+  // cannot serialize into props for client-side forms and navigation.
+  return rows.map(row => ({ ...row }));
 }
 
 export function getOrganizationForUser(
@@ -40,7 +42,7 @@ export function getOrganizationForUser(
        WHERE m.user_id = ? AND o.id = ?`,
     )
     .get(userId, orgId) as Organization | undefined;
-  return row ?? null;
+  return row ? { ...row } : null;
 }
 
 export function createOrganization(
@@ -87,13 +89,14 @@ export function createOrganization(
 }
 
 export function listProjects(organizationId: string): Project[] {
-  return getDb()
+  const rows = getDb()
     .prepare(
       `SELECT id, organization_id, name, slug, environment
        FROM projects WHERE organization_id = ?
        ORDER BY created_at ASC`,
     )
     .all(organizationId) as Project[];
+  return rows.map(row => ({ ...row }));
 }
 
 export function createProject(

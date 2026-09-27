@@ -1,8 +1,9 @@
 import Link from "next/link";
 import { listAgents } from "@/lib/agents";
+import { listTools } from "@/lib/tools";
 import { getCurrentUser } from "@/lib/auth";
 import { getOrganizationForUser, listOrganizationsForUser, listProjects } from "@/lib/orgs";
-import { Button } from "@/components/ui/button";
+import { buttonStyles } from "@/components/ui/button";
 import { redirect, notFound } from "next/navigation";
 
 export default async function OverviewPage({ searchParams }: { searchParams: Promise<{ org?: string }> }) {
@@ -17,13 +18,15 @@ export default async function OverviewPage({ searchParams }: { searchParams: Pro
   const projects = listProjects(org.id);
 
   const agents = listAgents(user.id, org.id);
+  const tools = listTools(user.id, org.id);
 
   const kpis = [
     { label: "Registered Agents", value: String(agents.length), hint: `${agents.filter(a => a.status === "active").length} active` },
-    { label: "Tool Calls", value: "0", hint: "Gateway lands in Phase 4" },
-    { label: "Blocked Actions", value: "0", hint: "Real counts only" },
-    { label: "Pending Approvals", value: "0", hint: "Nothing waiting" },
-    { label: "Security Incidents", value: "0", hint: "That's good" },
+    { label: "Registered Tools", value: String(tools.length), hint: `${tools.filter(t => t.status === "active").length} active` },
+    { label: "Tool Calls", value: "—", hint: "Gateway not available yet" },
+    { label: "Blocked Actions", value: "—", hint: "Policy enforcement not available" },
+    { label: "Pending Approvals", value: "—", hint: "Approval workflow not available" },
+    { label: "Security Incidents", value: "—", hint: "Incident detection not available" },
   ];
 
   return (
@@ -36,7 +39,7 @@ export default async function OverviewPage({ searchParams }: { searchParams: Pro
         </p>
       </div>
 
-      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {kpis.map((kpi) => (
           <div
             key={kpi.label}
@@ -52,18 +55,13 @@ export default async function OverviewPage({ searchParams }: { searchParams: Pro
       <section className="rounded-lg border border-border bg-[#0a0c10] p-5">
         <h2 className="text-sm font-medium">{agents.length ? "Manage your agents" : "Register your first agent"}</h2>
         <p className="mt-2 max-w-xl text-sm leading-relaxed text-muted">
-          Register agents and manage their API keys. Tool registration and
-          gateway execution will be available in the next phases.
+          Register agents, manage their API keys, and define tools with input
+          schemas. Gateway execution will be available in Phase 4.
         </p>
         <div className="mt-4 flex flex-wrap gap-3">
-          <Link href={`/app/settings?org=${org.id}`}>
-            <Button size="sm">Open settings</Button>
-          </Link>
-          <Link href={`/app/agents?org=${org.id}`}>
-            <Button size="sm" variant="secondary">
-              Manage agents
-            </Button>
-          </Link>
+          <Link href={`/app/settings?org=${org.id}`} className={buttonStyles({ size: "sm" })}>Open settings</Link>
+          <Link href={`/app/agents?org=${org.id}`} className={buttonStyles({ size: "sm", variant: "secondary" })}>Manage agents</Link>
+          <Link href={`/app/tools?org=${org.id}`} className={buttonStyles({ size: "sm", variant: "secondary" })}>Manage tools</Link>
         </div>
       </section>
 

@@ -7,7 +7,7 @@
   --border: #1a1f27;
   --surface: #0b0e13;
   --surface-raised: #10141b;
-  --accent: #3d8bfd;
+  --accent: #2769c7;
   --accent-soft: rgba(61, 139, 253, 0.14);
   --ok: #3dd68c;
   --warn: #e3b341;
@@ -27,15 +27,15 @@
   --color-ok: var(--ok);
   --color-warn: var(--warn);
   --color-danger: var(--danger);
-  --font-sans: var(--font-sans);
-  --font-mono: var(--font-mono);
-  --font-display: var(--font-display);
+  --font-sans: var(--font-plex-sans);
+  --font-mono: var(--font-plex-mono);
+  --font-display: var(--font-syne);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-sans), ui-sans-serif, sans-serif;
+  font-family: var(--font-plex-sans), ui-sans-serif, sans-serif;
 }
 
 ::selection {
@@ -44,130 +44,17 @@ body {
 }
 
 .font-display {
-  font-family: var(--font-display), var(--font-sans), ui-sans-serif, sans-serif;
+  font-family: var(--font-syne), var(--font-plex-sans), ui-sans-serif, sans-serif;
 }
 
-/* Atmosphere: denser grid + radial wash — marketing / auth surfaces */
+/* Quiet background for account surfaces. */
 .bg-sentinel-atmosphere {
   background-color: var(--background);
-  background-image:
-    radial-gradient(ellipse 90% 60% at 50% -20%, var(--glow), transparent 58%),
-    radial-gradient(ellipse 45% 35% at 95% 10%, rgba(61, 253, 180, 0.07), transparent 50%),
-    radial-gradient(ellipse 35% 40% at 0% 60%, rgba(61, 139, 253, 0.06), transparent 55%),
-    linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
-  background-size:
-    auto,
-    auto,
-    auto,
-    40px 40px,
-    40px 40px;
-  background-position: center top, right top, left center, center, center;
 }
 
-@keyframes sentinel-shimmer {
-  0% {
-    background-position: 100% center;
-  }
-  100% {
-    background-position: -100% center;
-  }
-}
-
-@keyframes sentinel-fade-up {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes sentinel-pulse-line {
-  0%,
-  100% {
-    opacity: 0.35;
-  }
-  50% {
-    opacity: 1;
-  }
-}
-
-@keyframes sentinel-scan {
-  0% {
-    transform: translateY(-100%);
-    opacity: 0;
-  }
-  20% {
-    opacity: 0.5;
-  }
-  100% {
-    transform: translateY(220%);
-    opacity: 0;
-  }
-}
-
-@keyframes sentinel-word-roll {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes sentinel-marquee {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-50%);
-  }
-}
-
-.text-shimmer {
-  background: linear-gradient(
-    90deg,
-    var(--muted) 0%,
-    var(--foreground) 40%,
-    var(--muted) 80%
-  );
-  background-size: 200% auto;
-  background-clip: text;
-  -webkit-background-clip: text;
-  color: transparent;
-  animation: sentinel-shimmer 2.4s linear infinite;
-}
-
-.animate-fade-up {
-  animation: sentinel-fade-up 0.55s ease-out both;
-}
-
-.animate-fade-up-delay-1 {
-  animation: sentinel-fade-up 0.55s ease-out 0.08s both;
-}
-
-.animate-fade-up-delay-2 {
-  animation: sentinel-fade-up 0.55s ease-out 0.16s both;
-}
-
-.animate-pulse-line {
-  animation: sentinel-pulse-line 1.8s ease-in-out infinite;
-}
-
-.animate-scan {
-  animation: sentinel-scan 3.2s ease-in-out infinite;
-}
-
-.animate-word-roll {
-  animation: sentinel-word-roll 0.35s ease-out both;
-}
-
-.animate-marquee {
-  width: max-content;
-  animation: sentinel-marquee 28s linear infinite;
+:where(a, button, summary, select):focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -177,15 +64,6 @@ body {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
-  }
-
-  .text-shimmer {
-    background: none;
-    color: var(--muted);
-    -webkit-text-fill-color: unset;
-  }
-
-  .animate-marquee {
-    animation: none;
+    scroll-behavior: auto !important;
   }
 }
