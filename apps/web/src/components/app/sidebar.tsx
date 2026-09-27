@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams, useRouter } from "next/navigation";
 import {
   Activity,
   AlertTriangle,
@@ -15,6 +15,7 @@ import {
   X,
   ScrollText,
 } from "lucide-react";
+import type { Organization } from "@/lib/orgs";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { logoutAction } from "@/app/(auth)/actions";
@@ -22,7 +23,7 @@ import { Button } from "@/components/ui/button";
 
 const NAV = [
   { href: "/app", label: "Overview", icon: LayoutDashboard },
-  { href: "/app/agents", label: "Agents", icon: Bot, soon: true },
+  { href: "/app/agents", label: "Agents", icon: Bot },
   { href: "/app/tools", label: "Tools", icon: Wrench, soon: true },
   { href: "/app/policies", label: "Policies", icon: ScrollText, soon: true },
   { href: "/app/approvals", label: "Approvals", icon: CheckSquare, soon: true },
@@ -33,17 +34,18 @@ const NAV = [
 ] as const;
 
 export function AppSidebar({
-  orgName,
-  orgSlug,
+  organizations,
   userName,
   userEmail,
 }: {
-  orgName: string;
-  orgSlug: string;
+  organizations: Organization[];
   userName: string;
   userEmail: string;
 }) {
   const pathname = usePathname();
+  const params = useSearchParams();
+  const router = useRouter();
+  const org = organizations.find(o => o.id === params.get("org")) ?? organizations[0];
   const [open, setOpen] = useState(false);
 
   const nav = (
@@ -53,8 +55,11 @@ export function AppSidebar({
           Sentinel
         </Link>
         <div className="mt-3">
-          <p className="truncate text-sm font-medium">{orgName}</p>
-          <p className="truncate font-mono text-[11px] text-muted">{orgSlug}</p>
+          <label className="text-xs text-muted" htmlFor="organization-switcher">Organization</label>
+          <select id="organization-switcher" value={org.id} onChange={event => router.push(`${pathname}?org=${event.target.value}`)} className="mt-1 w-full rounded border border-border bg-[#0d1117] p-1 text-sm">
+            {organizations.map(item => <option key={item.id} value={item.id}>{item.name}</option>)}
+          </select>
+          <p className="truncate font-mono text-[11px] text-muted">{org.slug}</p>
         </div>
         <div className="mt-3 inline-flex items-center gap-1.5 rounded border border-border px-2 py-1 font-mono text-[10px] text-muted">
           <span className="h-1.5 w-1.5 rounded-full bg-ok" aria-hidden />
@@ -72,7 +77,7 @@ export function AppSidebar({
           return (
             <Link
               key={item.href}
-              href={item.href}
+              href={`${item.href}?org=${org.id}`}
               onClick={() => setOpen(false)}
               className={cn(
                 "flex items-center gap-2 rounded-md px-2.5 py-2 text-sm transition-colors",

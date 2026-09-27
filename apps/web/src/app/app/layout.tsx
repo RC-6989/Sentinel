@@ -14,13 +14,11 @@ export default async function AppLayout({
   const orgs = listOrganizationsForUser(user.id);
   if (orgs.length === 0) redirect("/signup");
 
-  const org = orgs[0]!;
 
   return (
     <div className="flex min-h-screen flex-col bg-background text-foreground lg:flex-row">
       <AppSidebar
-        orgName={org.name}
-        orgSlug={org.slug}
+        organizations={orgs}
         userName={user.name}
         userEmail={user.email}
       />

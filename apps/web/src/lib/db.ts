@@ -29,7 +29,7 @@ function applyMigrations(db: DatabaseSync) {
     );
   `);
 
-  const files = ["0000_init.sql", "0001_saas_foundation.sql"];
+  const files = ["0000_init.sql", "0001_saas_foundation.sql", "0002_agents_api_keys.sql"];
   for (const file of files) {
     const version = file.replace(/\.sql$/, "");
     const existing = db
@@ -38,10 +38,17 @@ function applyMigrations(db: DatabaseSync) {
     if (existing) continue;
 
     const sql = readFileSync(path.join(migrationsDir(), file), "utf8");
-    db.exec(sql);
-    db.prepare(
-      "INSERT OR IGNORE INTO schema_migrations (version) VALUES (?)",
-    ).run(version);
+    db.exec("BEGIN");
+    try {
+      db.exec(sql);
+      db.prepare(
+        "INSERT OR IGNORE INTO schema_migrations (version) VALUES (?)",
+      ).run(version);
+      db.exec("COMMIT");
+    } catch (error) {
+      db.exec("ROLLBACK");
+      throw error;
+    }
   }
 }
 

@@ -1,15 +1,16 @@
-import { redirect } from "next/navigation";
+import { redirect, notFound } from "next/navigation";
 import { getCurrentUser } from "@/lib/auth";
-import { listOrganizationsForUser, listProjects } from "@/lib/orgs";
+import { getOrganizationForUser, listOrganizationsForUser, listProjects } from "@/lib/orgs";
 import { CreateOrgForm, CreateProjectForm } from "@/components/app/settings-forms";
 
-export default async function SettingsPage() {
+export default async function SettingsPage({ searchParams }: { searchParams: Promise<{ org?: string }> }) {
   const user = await getCurrentUser();
   if (!user) redirect("/login");
 
   const orgs = listOrganizationsForUser(user.id);
-  const org = orgs[0];
-  if (!org) redirect("/signup");
+  const { org: orgId } = await searchParams;
+  const org = orgId ? getOrganizationForUser(user.id, orgId) : orgs[0];
+  if (!org) notFound();
   const projects = listProjects(org.id);
 
   return (
@@ -76,8 +77,7 @@ export default async function SettingsPage() {
       <section className="space-y-3 border-t border-border pt-6">
         <h2 className="text-sm font-medium">Create another organization</h2>
         <p className="text-sm text-muted">
-          Multi-org switching UI expands later; new orgs are stored with full
-          tenant isolation now.
+          Switch between your organizations using the sidebar selector.
         </p>
         <CreateOrgForm />
       </section>

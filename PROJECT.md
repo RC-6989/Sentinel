@@ -167,3 +167,4 @@ A stranger can sign up, create org/agent/tool/policy, generate an API key, send 
 - Migrations for schema changes
 - Keep the app runnable after each phase
 - Before completion: lint, typecheck, tests, build, smoke test
+

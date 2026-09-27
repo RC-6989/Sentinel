@@ -1,0 +1,14 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "noEmit": false,
+    "incremental": false,
+    "outDir": ".test-build",
+    "rootDir": "src/lib",
+    "plugins": []
+  },
+  "include": ["src/lib/agents.ts", "src/lib/db.ts", "src/lib/orgs.ts", "src/types/node-sqlite.d.ts"],
+  "exclude": ["node_modules", ".test-build"]
+}

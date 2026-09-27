@@ -1,21 +1,25 @@
 import Link from "next/link";
+import { listAgents } from "@/lib/agents";
 import { getCurrentUser } from "@/lib/auth";
-import { listOrganizationsForUser, listProjects } from "@/lib/orgs";
+import { getOrganizationForUser, listOrganizationsForUser, listProjects } from "@/lib/orgs";
 import { Button } from "@/components/ui/button";
-import { redirect } from "next/navigation";
+import { redirect, notFound } from "next/navigation";
 
-export default async function OverviewPage() {
+export default async function OverviewPage({ searchParams }: { searchParams: Promise<{ org?: string }> }) {
   const user = await getCurrentUser();
   if (!user) redirect("/login");
 
   const orgs = listOrganizationsForUser(user.id);
-  const org = orgs[0];
-  if (!org) redirect("/signup");
+  const { org: orgId } = await searchParams;
+  const org = orgId ? getOrganizationForUser(user.id, orgId) : orgs[0];
+  if (!org) notFound();
 
   const projects = listProjects(org.id);
 
+  const agents = listAgents(user.id, org.id);
+
   const kpis = [
-    { label: "Protected Agents", value: "0", hint: "Create an agent in Phase 2" },
+    { label: "Registered Agents", value: String(agents.length), hint: `${agents.filter(a => a.status === "active").length} active` },
     { label: "Tool Calls", value: "0", hint: "Gateway lands in Phase 4" },
     { label: "Blocked Actions", value: "0", hint: "Real counts only" },
     { label: "Pending Approvals", value: "0", hint: "Nothing waiting" },
@@ -46,19 +50,18 @@ export default async function OverviewPage() {
       </div>
 
       <section className="rounded-lg border border-border bg-[#0a0c10] p-5">
-        <h2 className="text-sm font-medium">No agents yet</h2>
+        <h2 className="text-sm font-medium">{agents.length ? "Manage your agents" : "Register your first agent"}</h2>
         <p className="mt-2 max-w-xl text-sm leading-relaxed text-muted">
-          Connect your first agent to Sentinel and start seeing every tool
-          action in one place. Agent management ships in Phase 2 — Settings
-          and organization controls are available now.
+          Register agents and manage their API keys. Tool registration and
+          gateway execution will be available in the next phases.
         </p>
         <div className="mt-4 flex flex-wrap gap-3">
-          <Link href="/app/settings">
+          <Link href={`/app/settings?org=${org.id}`}>
             <Button size="sm">Open settings</Button>
           </Link>
-          <Link href="/app/agents">
+          <Link href={`/app/agents?org=${org.id}`}>
             <Button size="sm" variant="secondary">
-              Agents (coming soon)
+              Manage agents
             </Button>
           </Link>
         </div>

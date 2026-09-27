@@ -2,7 +2,7 @@
 
 **Control what your AI agents can do.**
 
-**Landing page live at http://trysentinelapp.vercel.app
+**Landing page live at http://trysentinelapp.vercel.app**
 
 Sentinel is a security control plane that sits between AI agents and the tools/data they can access. It intercepts tool calls, evaluates deterministic policies and risk, blocks unauthorized actions, pauses dangerous actions for human approval, detects suspicious content, records an audit trail, and identifies abnormal agent behavior.
 
@@ -12,7 +12,7 @@ Defense in depth for autonomous agents — without requiring paid LLM inference 
 
 ## Status
 
-Phase 0 foundation. See [PROJECT.md](./PROJECT.md) and [CHANGELOG.md](./CHANGELOG.md).
+Phase 2 implemented locally: authentication, organizations/projects, agent management, and scoped API keys. The Worker gateway is still a stub; tool registration is next. See [PROJECT.md](./PROJECT.md) and [CHANGELOG.md](./CHANGELOG.md).
 
 ## Stack (planned)
 
@@ -43,14 +43,14 @@ sentinel/
 
 ## Prerequisites
 
-- Node.js 20+
+- Node.js 22.13+ (required for `node:sqlite`)
 - pnpm 10+
 
 ## Quick start (local)
 
 ```bash
 pnpm install
-cp .env.example .env.local
+cp .env.example apps/web/.env.local
 pnpm dev
 ```
 
@@ -62,7 +62,11 @@ curl http://localhost:3000/api/health
 
 ## Environment
 
-Copy `.env.example` to `.env.local`. Never commit secrets.
+Copy `.env.example` to `apps/web/.env.local`. Never commit secrets.
+
+Local development exposes `/signup`, `/login`, and `/app`. Production remains in waitlist mode unless `SENTINEL_WAITLIST_MODE=false` is explicitly set. The dashboard currently requires a persistent local SQLite filesystem; it is not ready for serverless deployment.
+
+See [agent and API key setup](docs/agents.md) for usage and verification.
 
 ## Cost & constraints
 

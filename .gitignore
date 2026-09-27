@@ -63,3 +63,6 @@ temp/
 .data/
 *.sqlite
 *.sqlite-journal
+
+# Compiled service tests
+.test-build/
