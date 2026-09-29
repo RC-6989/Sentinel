@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { getDb, newId, slugify } from "./db";
 
 export type Organization = {
@@ -15,7 +16,7 @@ export type Project = {
   environment: string;
 };
 
-export function listOrganizationsForUser(userId: string): Organization[] {
+function loadOrganizationsForUser(userId: string): Organization[] {
   const rows = getDb()
     .prepare(
       `SELECT o.id, o.name, o.slug, m.role
@@ -30,10 +31,15 @@ export function listOrganizationsForUser(userId: string): Organization[] {
   return rows.map(row => ({ ...row }));
 }
 
-export function getOrganizationForUser(
+// Layouts, pages, and resource authorization checks reuse these reads. This
+// is request-scoped memoization, not a process-wide data cache, so membership
+// changes are visible on the next request and tenant boundaries stay intact.
+export const listOrganizationsForUser = cache(loadOrganizationsForUser);
+
+const loadOrganizationForUser = (
   userId: string,
   orgId: string,
-): Organization | null {
+): Organization | null => {
   const row = getDb()
     .prepare(
       `SELECT o.id, o.name, o.slug, m.role
@@ -43,7 +49,9 @@ export function getOrganizationForUser(
     )
     .get(userId, orgId) as Organization | undefined;
   return row ? { ...row } : null;
-}
+};
+
+export const getOrganizationForUser = cache(loadOrganizationForUser);
 
 export function createOrganization(
   userId: string,
@@ -91,7 +99,7 @@ export function createOrganization(
   return { id, name, slug, role: "owner" };
 }
 
-export function listProjects(organizationId: string): Project[] {
+function loadProjects(organizationId: string): Project[] {
   const rows = getDb()
     .prepare(
       `SELECT id, organization_id, name, slug, environment
@@ -101,6 +109,8 @@ export function listProjects(organizationId: string): Project[] {
     .all(organizationId) as Project[];
   return rows.map(row => ({ ...row }));
 }
+
+export const listProjects = cache(loadProjects);
 
 export function createProject(
   organizationId: string,

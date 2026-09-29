@@ -7,8 +7,8 @@ import type { Project } from "@/lib/orgs";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
-const selectClass = "block h-10 w-full rounded-md border border-border bg-[#0d1117] px-3 text-sm";
-const textareaClass = "mt-1 block w-full rounded-md border border-border bg-[#0d1117] p-3 font-mono text-xs";
+const selectClass = "control-field block h-11 w-full rounded-md border border-border bg-white px-3 text-sm";
+const textareaClass = "control-field mt-2 block w-full rounded-md border border-border bg-white p-3 font-mono text-xs leading-6";
 const exampleSchema = JSON.stringify({
   type: "object", properties: { query: { type: "string", minLength: 1, maxLength: 200 } },
   required: ["query"], additionalProperties: false,
@@ -22,11 +22,11 @@ function ToolForm({ organizationId, operation, children, label }: {
     <input type="hidden" name="organizationId" value={organizationId} />
     <input type="hidden" name="operation" value={operation} />
     {children}
-    {!pending && state.error && <p role="alert" className="text-sm text-[#f85149]">{state.error}</p>}
+    {!pending && state.error && <p role="alert" className="text-sm text-danger">{state.error}</p>}
     {!pending && state.message && <p role="status" className="text-sm text-muted">{state.message}</p>}
     {!pending && state.validation && <div role="status" className="space-y-1 text-sm">
       <p>{state.validation.valid ? "Input matches the saved schema. No tool was executed." : "Input does not match the saved schema."}</p>
-      {state.validation.errors.map((error, index) => <p key={index} className="break-all font-mono text-xs text-[#f85149]">{error}</p>)}
+      {state.validation.errors.map((error, index) => <p key={index} className="break-all font-mono text-xs text-danger">{error}</p>)}
     </div>}
     <Button type="submit" size="sm" disabled={pending}>{pending ? "Checking…" : label}</Button>
   </form>;

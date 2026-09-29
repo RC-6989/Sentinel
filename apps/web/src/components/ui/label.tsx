@@ -7,7 +7,7 @@ export function Label({
 }: LabelHTMLAttributes<HTMLLabelElement>) {
   return (
     <label
-      className={cn("mb-1.5 block text-xs font-medium text-muted", className)}
+      className={cn("mb-2 block text-[11px] font-medium tracking-[0.08em] text-muted uppercase", className)}
       {...props}
     />
   );

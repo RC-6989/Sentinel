@@ -16,14 +16,14 @@ export default async function AppLayout({
 
 
   return (
-    <div className="flex min-h-screen flex-col bg-background text-foreground lg:flex-row">
+    <div className="app-shell flex min-h-screen flex-col lg:flex-row">
       <AppSidebar
         organizations={orgs}
         userName={user.name}
         userEmail={user.email}
       />
       <div className="flex min-w-0 flex-1 flex-col">
-        <main className="flex-1 px-4 py-6 sm:px-6 lg:px-8">{children}</main>
+        <main className="app-main flex-1 px-5 py-6 sm:px-8 lg:px-12 lg:py-10 xl:px-16">{children}</main>
       </div>
     </div>
   );

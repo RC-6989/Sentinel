@@ -21,7 +21,7 @@ export function CreateOrgForm() {
         <Input id="org-name" name="name" required />
       </div>
       {state.error ? (
-        <p className="text-sm text-[#f85149]" role="alert">
+        <p className="text-sm text-danger" role="alert">
           {state.error}
         </p>
       ) : null}
@@ -47,7 +47,7 @@ export function CreateProjectForm({ organizationId }: { organizationId: string }
           id="environment"
           name="environment"
           defaultValue="development"
-          className="flex h-10 w-full rounded-md border border-border bg-[#0d1117] px-3 text-sm"
+          className="control-field flex h-11 w-full rounded-md border border-border bg-white px-3 text-sm"
         >
           <option value="development">development</option>
           <option value="staging">staging</option>
@@ -55,7 +55,7 @@ export function CreateProjectForm({ organizationId }: { organizationId: string }
         </select>
       </div>
       {state.error ? (
-        <p className="text-sm text-[#f85149]" role="alert">
+        <p className="text-sm text-danger" role="alert">
           {state.error}
         </p>
       ) : null}

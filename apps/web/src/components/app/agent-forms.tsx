@@ -7,7 +7,7 @@ import type { Project } from "@/lib/orgs";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
-const selectClass = "block h-10 w-full rounded-md border border-border bg-[#0d1117] px-3 text-sm";
+const selectClass = "control-field block h-11 w-full rounded-md border border-border bg-white px-3 text-sm";
 
 function AgentForm({ organizationId, operation, children, label }: {
   organizationId: string; operation: string; children: React.ReactNode; label: string;
@@ -18,7 +18,7 @@ function AgentForm({ organizationId, operation, children, label }: {
     <input type="hidden" name="organizationId" value={organizationId} />
     <input type="hidden" name="operation" value={operation} />
     {children}
-    {state.error && <p role="alert" className="text-sm text-[#f85149]">{state.error}</p>}
+    {state.error && <p role="alert" className="text-sm text-danger">{state.error}</p>}
     {state.message && <p role="status" className="text-sm text-muted">{state.message}</p>}
     {state.token && state.token !== dismissedToken && <div className="space-y-2 rounded border border-border p-3">
       <p className="text-sm">Copy this key now. It cannot be retrieved after leaving this page.</p>

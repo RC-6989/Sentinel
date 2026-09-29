@@ -12,7 +12,7 @@ Defense in depth for autonomous agents — without requiring paid LLM inference 
 
 ## Status
 
-Phases 0–5 are implemented locally: authentication, organizations/projects, agents, scoped API keys, a tool registry with JSON Schema input validation, an opt-in HTTP execution gateway, and fail-closed deterministic project policies. The Cloudflare Worker gateway and hosted auth/database integration are still in progress; a visual policy builder and human approval workflow come later. See [PROJECT.md](./PROJECT.md), [policy documentation](docs/policies.md), and [CHANGELOG.md](./CHANGELOG.md).
+Phases 0–5 are implemented locally: authentication, organizations/projects, agents, scoped API keys, a tool registry with JSON Schema input validation, an opt-in HTTP execution gateway, and fail-closed deterministic project policies. The marketing, auth, and dashboard surfaces share a responsive editorial visual system with reduced-motion support. The Cloudflare Worker gateway and hosted auth/database integration are still in progress; a visual policy builder and human approval workflow come later. See [PROJECT.md](./PROJECT.md), [policy documentation](docs/policies.md), and [CHANGELOG.md](./CHANGELOG.md).
 
 ## Stack (planned)
 

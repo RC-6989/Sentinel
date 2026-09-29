@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import { MotionEffects } from "@/components/ui/motion-effects";
 import "./globals.css";
 import "./marketing.css";
 
@@ -50,6 +51,7 @@ export default function RootLayout({
       <body
         className={`${plexSans.variable} ${plexMono.variable} ${syne.variable} antialiased`}
       >
+        <MotionEffects />
         {children}
       </body>
     </html>

@@ -104,7 +104,7 @@ Every tenant-owned object must associate with an organization. Never authorize o
 
 ## Build phases (do not jump ahead)
 
-Current progress (2026-09-29): Phases 0–5 are implemented locally. The project-scoped tool registry has bounded JSON Schema validation. The opt-in Node/SQLite gateway dispatches low/medium risk tools only to operator-allowed targets when a deterministic project policy allows them, with auth, quotas, idempotency, and call metadata. A JSON policy editor is available; the visual builder is Phase 6. Worker/D1 gateway deployment and human approvals remain unimplemented. The user provisioned staging D1; its account/session foundation and all six migrations are verified locally, but hosted auth and product adapters are not connected.
+Current progress (2026-09-29): Phases 0–5 are implemented locally. The project-scoped tool registry has bounded JSON Schema validation. The opt-in Node/SQLite gateway dispatches low/medium risk tools only to operator-allowed targets when a deterministic project policy allows them, with auth, quotas, idempotency, and call metadata. Marketing, auth, and dashboard now share a responsive editorial visual system, and repeated auth/organization/project reads are deduplicated within each server render. A JSON policy editor is available; the visual builder is Phase 6. Worker/D1 gateway deployment and human approvals remain unimplemented. The user provisioned staging D1; its account/session foundation and all six migrations are verified locally, but hosted auth and product adapters are not connected.
 
 | Phase | Focus |
 | --- | --- |

@@ -49,7 +49,7 @@ export function SignupForm() {
         />
       </div>
       {state.error ? (
-        <p className="text-sm text-[#f85149]" role="alert">
+        <p className="text-sm text-danger" role="alert">
           {state.error}
         </p>
       ) : null}

@@ -8,6 +8,9 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+- Cohesive light editorial visual system across the marketing site, authentication screens, and dashboard, with shared surface, status, form, navigation, and responsive layout treatments
+- Reduced-motion-aware reveal sequences, staggered content, scroll progress, subtle pointer tilt, and magnetic button feedback through one reusable client effect layer
+
 - Phase 5 fail-closed deterministic policy engine with bounded JSON rules, exact context/argument matches, and deny-over-approval-over-allow precedence
 - Project-scoped policy storage, owner/admin JSON editor, tenant/project authorization, transactional audit records, and policy IDs on allowed calls
 - Gateway policy enforcement before outbound dispatch; denied and approval-required calls stop and audit without storing arguments
@@ -37,7 +40,16 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Organization switching across dashboard, agents, and settings
 - Ten service/security tests, now included in CI
 
+### Changed
+
+- Deduplicate authentication, organization membership, and project reads within each server render without caching identity or authorization decisions across requests
+- Use the standard Next.js development engine for this Windows workspace; authenticated warm dashboard routes measured 258–283 ms server-side after prewarming, down from the prior 400–650 ms range
+- Preload a narrowly scoped Windows compatibility shim before `tsx` tests so managed Windows environments do not fail in `os.userInfo()` before test execution
+
 ### Fixed
+
+- Prevent repeated dashboard layout/page work from verifying the same session or querying the same organization/project more than once per render request
+- Restore reliable full-suite test startup on Windows while leaving Unix test behavior unchanged
 
 - Replace invented SDK usage, simulated live activity, risk scores, and inactive approval controls with an honest explanation of the planned product
 - Replace unavailable dashboard metrics and auth security claims with explicit availability states

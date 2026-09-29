@@ -1,5 +1,6 @@
 import { cookies } from "next/headers";
 import { SignJWT, jwtVerify } from "jose";
+import { cache } from "react";
 import { getDb, hashToken, newId } from "./db";
 import { configuredAuthSecret } from "./deployment";
 
@@ -80,7 +81,7 @@ export async function destroySession(): Promise<void> {
   });
 }
 
-export async function getCurrentUser(): Promise<SessionUser | null> {
+async function loadCurrentUser(): Promise<SessionUser | null> {
   const jar = await cookies();
   const token = jar.get(SESSION_COOKIE)?.value;
   if (!token) return null;
@@ -120,3 +121,9 @@ export async function getCurrentUser(): Promise<SessionUser | null> {
     return null;
   }
 }
+
+// Layouts and pages both authenticate during one server render. React cache is
+// request-scoped, so this removes duplicate JWT/session work without sharing
+// identity state across users or requests. Keep this boundary when sessions
+// move to a remote auth or database service.
+export const getCurrentUser = cache(loadCurrentUser);

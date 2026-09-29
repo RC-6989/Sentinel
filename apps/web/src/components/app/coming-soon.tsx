@@ -11,20 +11,24 @@ export function ComingSoon({
   description: string;
 }) {
   return (
-    <div className="mx-auto max-w-xl pt-8">
-      <p className="font-mono text-[11px] tracking-wide text-muted uppercase">
-        {phase} · not available yet
-      </p>
-      <h1 className="mt-2 text-2xl font-semibold tracking-tight">{title}</h1>
-      <p className="mt-3 text-sm leading-relaxed text-muted">{description}</p>
-      <p className="mt-4 text-sm text-muted">
-        This feature is planned. You can manage agents and API keys from the overview.
-      </p>
-      <div className="mt-6">
-        <Link href="/app" className={buttonStyles({ size: "sm", variant: "secondary" })}>
-          Back to overview
-        </Link>
-      </div>
+    <div className="app-page app-page-narrow">
+      <header className="page-header" data-reveal>
+        <p className="page-eyebrow">{phase} / Planned capability</p>
+        <h1 className="page-title">{title}</h1>
+        <p className="page-description">{description}</p>
+      </header>
+      <section className="surface-panel mt-8 p-6 sm:p-8" data-reveal data-reveal-delay="80">
+        <span className="status-pill status-pill-muted">Not available yet</span>
+        <h2 className="mt-6 text-lg font-medium">This surface is on the roadmap.</h2>
+        <p className="mt-3 max-w-xl text-sm leading-7 text-muted">
+          You can continue configuring agents, API keys, tools, and policies from the live areas of the workspace.
+        </p>
+        <div className="mt-7">
+          <Link href="/app" className={buttonStyles({ size: "sm", variant: "secondary" })}>
+            Back to overview
+          </Link>
+        </div>
+      </section>
     </div>
   );
 }

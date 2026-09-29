@@ -7,8 +7,8 @@ import type { Project } from "@/lib/orgs";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
-const selectClass = "block h-10 w-full rounded-md border border-border bg-[#0d1117] px-3 text-sm";
-const textareaClass = "mt-1 block w-full rounded-md border border-border bg-[#0d1117] p-3 font-mono text-xs";
+const selectClass = "control-field block h-11 w-full rounded-md border border-border bg-white px-3 text-sm";
+const textareaClass = "control-field mt-2 block w-full rounded-md border border-border bg-white p-3 font-mono text-xs leading-6";
 const example = JSON.stringify([{ id: "allow-low-risk", effect: "allow", riskLevel: "low" }], null, 2);
 
 function PolicyForm({ organizationId, operation, policy, projects }: {
@@ -29,7 +29,7 @@ function PolicyForm({ organizationId, operation, policy, projects }: {
       <option value="active">Active</option><option value="disabled">Disabled</option>
     </select></label>}
     <p className="text-xs text-muted">Each rule needs an ID and an allow, deny, or approval effect. Optional matches: toolId, agentId, environment, riskLevel, or one argument condition. Deny overrides approval, then allow. No match denies.</p>
-    {!pending && state.error && <p role="alert" className="text-sm text-[#f85149]">{state.error}</p>}
+    {!pending && state.error && <p role="alert" className="text-sm text-danger">{state.error}</p>}
     {!pending && state.message && <p role="status" className="text-sm text-muted">{state.message}</p>}
     <Button type="submit" size="sm" disabled={pending}>{pending ? "Saving…" : policy ? "Save policy" : "Create policy"}</Button>
   </form>;

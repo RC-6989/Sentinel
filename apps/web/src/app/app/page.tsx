@@ -33,34 +33,40 @@ export default async function OverviewPage({ searchParams }: { searchParams: Pro
   ];
 
   return (
-    <div className="mx-auto max-w-6xl space-y-8">
-      <div>
-        <h1 className="text-2xl font-semibold tracking-tight">Overview</h1>
-        <p className="mt-1 text-sm text-muted">
+    <div className="app-page app-page-stack">
+      <header className="page-header" data-reveal>
+        <p className="page-eyebrow">Control plane / Overview</p>
+        <h1 className="page-title">Overview</h1>
+        <p className="page-description">
           Welcome, {user.name}. Organization{" "}
           <span className="text-foreground">{org.name}</span> is ready.
         </p>
-      </div>
+      </header>
 
-      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-        {kpis.map((kpi) => (
+      <section className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3" aria-label="Workspace metrics">
+        {kpis.map((kpi, index) => (
           <div
             key={kpi.label}
-            className="border-t border-border pt-3"
+            className="surface-panel surface-panel-interactive min-h-36 p-5"
+            data-reveal
+            data-reveal-delay={index * 45}
           >
-            <p className="text-xs text-muted">{kpi.label}</p>
-            <p className="mt-1 font-mono text-2xl tabular-nums">{kpi.value}</p>
-            <p className="mt-1 text-xs text-muted">{kpi.hint}</p>
+            <p className="section-label">{kpi.label}</p>
+            <p className="mt-5 font-mono text-3xl tracking-[-0.04em] tabular-nums">{kpi.value}</p>
+            <p className="mt-2 text-xs leading-5 text-muted">{kpi.hint}</p>
           </div>
         ))}
-      </div>
+      </section>
 
-      <section className="rounded-lg border border-border bg-[#0a0c10] p-5">
-        <h2 className="text-sm font-medium">{agents.length ? "Manage your agents" : "Register your first agent"}</h2>
-        <p className="mt-2 max-w-xl text-sm leading-relaxed text-muted">
+      <section className="surface-panel grid gap-6 p-6 md:grid-cols-[1fr_auto] md:items-end" data-reveal data-tilt>
+        <div>
+        <p className="section-label">Next action</p>
+        <h2 className="mt-3 text-xl font-medium tracking-tight">{agents.length ? "Manage your agent boundary" : "Register your first agent"}</h2>
+        <p className="mt-3 max-w-2xl text-sm leading-7 text-muted">
           Register agents, manage their API keys, and define tools with input
           schemas. Opted-in low or medium risk tools can run through the local gateway when a project policy allows them.
         </p>
+        </div>
         <div className="mt-4 flex flex-wrap gap-3">
           <Link href={`/app/settings?org=${org.id}`} className={buttonStyles({ size: "sm" })}>Open settings</Link>
           <Link href={`/app/agents?org=${org.id}`} className={buttonStyles({ size: "sm", variant: "secondary" })}>Manage agents</Link>
@@ -69,19 +75,22 @@ export default async function OverviewPage({ searchParams }: { searchParams: Pro
         </div>
       </section>
 
-      <section>
-        <h2 className="text-sm font-medium">Projects</h2>
-        <ul className="mt-3 divide-y divide-border border-y border-border">
+      <section data-reveal>
+        <div className="flex items-end justify-between gap-4">
+          <div><p className="section-label">Environment</p><h2 className="mt-2 text-lg font-medium">Projects</h2></div>
+          <span className="font-mono text-xs text-muted">{projects.length} total</span>
+        </div>
+        <ul className="surface-panel mt-4 divide-y divide-border px-5">
           {projects.map((p) => (
             <li
               key={p.id}
-              className="flex items-center justify-between gap-4 py-3 text-sm"
+              className="flex items-center justify-between gap-4 py-4 text-sm"
             >
               <div>
                 <p className="font-medium">{p.name}</p>
                 <p className="font-mono text-xs text-muted">{p.slug}</p>
               </div>
-              <span className="rounded border border-border px-2 py-0.5 font-mono text-[10px] text-muted uppercase">
+              <span className="status-pill status-pill-active">
                 {p.environment}
               </span>
             </li>

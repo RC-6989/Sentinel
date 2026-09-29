@@ -50,24 +50,24 @@ export function AppSidebar({
 
   const nav = (
     <>
-      <div className="border-b border-border px-4 py-4">
-        <Link href="/" className="font-display text-sm font-bold tracking-tight">
+      <div className="border-b border-border px-5 py-6">
+        <Link href="/" className="auth-wordmark">
           Sentinel
         </Link>
-        <div className="mt-3">
-          <label className="text-xs text-muted" htmlFor="organization-switcher">Organization</label>
-          <select id="organization-switcher" value={org.id} onChange={event => router.push(`${pathname}?org=${event.target.value}`)} className="mt-1 w-full rounded border border-border bg-[#0d1117] p-1 text-sm">
+        <div className="mt-7">
+          <label className="section-label" htmlFor="organization-switcher">Organization</label>
+          <select id="organization-switcher" value={org.id} onChange={event => router.push(`${pathname}?org=${event.target.value}`)} className="mt-2 h-10 w-full rounded-md border border-border bg-white px-2.5 text-sm">
             {organizations.map(item => <option key={item.id} value={item.id}>{item.name}</option>)}
           </select>
-          <p className="truncate font-mono text-[11px] text-muted">{org.slug}</p>
+          <p className="mt-1.5 truncate font-mono text-[10px] text-muted">{org.slug}</p>
         </div>
-        <div className="mt-3 inline-flex items-center gap-1.5 rounded border border-border px-2 py-1 font-mono text-[10px] text-muted">
-          <span className="h-1.5 w-1.5 rounded-full bg-ok" aria-hidden />
+        <div className="status-pill status-pill-active mt-4">
           development
         </div>
       </div>
 
-      <nav className="flex-1 space-y-0.5 p-2" aria-label="Primary">
+      <nav className="flex-1 space-y-1 p-3" aria-label="Primary">
+        <p className="section-label px-2.5 pb-2 pt-3">Workspace</p>
         {NAV.map((item) => {
           const active =
             item.href === "/app"
@@ -80,26 +80,26 @@ export function AppSidebar({
               href={`${item.href}?org=${org.id}`}
               onClick={() => setOpen(false)}
               className={cn(
-                "flex items-center gap-2 rounded-md px-2.5 py-2 text-sm transition-colors",
+                "group flex min-h-10 items-center gap-2.5 rounded-md border px-2.5 py-2 text-sm transition-all duration-150",
                 active
-                  ? "bg-white/5 text-foreground"
-                  : "text-muted hover:bg-white/[0.03] hover:text-foreground",
+                  ? "border-[#cbd2c8] bg-[#e8ebe4] text-foreground"
+                  : "border-transparent text-muted hover:border-border hover:bg-[#eff1eb] hover:text-foreground",
               )}
               aria-current={active ? "page" : undefined}
             >
-              <Icon className="h-4 w-4 shrink-0" aria-hidden />
+              <Icon className={cn("h-4 w-4 shrink-0 transition-colors", active ? "text-[#315a43]" : "text-[#778078] group-hover:text-[#3f624d]")} aria-hidden />
               <span className="flex-1">{item.label}</span>
               {"soon" in item && item.soon ? (
-                <span className="font-mono text-[10px] text-muted">soon</span>
+                <span className="font-mono text-[9px] tracking-wide text-[#7b867e] uppercase">soon</span>
               ) : null}
             </Link>
           );
         })}
       </nav>
 
-      <div className="border-t border-border p-3">
-        <p className="truncate text-sm">{userName}</p>
-        <p className="truncate text-xs text-muted">{userEmail}</p>
+      <div className="border-t border-border p-4">
+        <p className="truncate text-sm font-medium">{userName}</p>
+        <p className="mt-0.5 truncate font-mono text-[10px] text-muted">{userEmail}</p>
         <form action={logoutAction} className="mt-3">
           <Button type="submit" variant="ghost" size="sm" className="w-full justify-start px-2">
             Sign out
@@ -111,13 +111,13 @@ export function AppSidebar({
 
   return (
     <>
-      <div className="flex items-center justify-between border-b border-border px-4 py-3 lg:hidden">
-        <span className="font-display text-sm font-bold tracking-tight">
+      <div className="flex items-center justify-between border-b border-border bg-[#f7f7f2] px-4 py-3 lg:hidden">
+        <span className="auth-wordmark">
           Sentinel
         </span>
         <button
           type="button"
-          className="rounded-md border border-border p-2 text-muted"
+          className="button-magnetic rounded-md border border-border bg-surface p-2 text-muted"
           aria-label={open ? "Close menu" : "Open menu"}
           onClick={() => setOpen((v) => !v)}
         >
@@ -129,17 +129,17 @@ export function AppSidebar({
         <div className="fixed inset-0 z-40 flex lg:hidden">
           <button
             type="button"
-            className="absolute inset-0 bg-black/60"
+            className="absolute inset-0 bg-black/30"
             aria-label="Close menu overlay"
             onClick={() => setOpen(false)}
           />
-          <aside className="relative z-10 flex h-full w-64 flex-col border-r border-border bg-[#0a0c10]">
+          <aside className="relative z-10 flex h-full w-64 flex-col border-r border-border bg-[#f7f7f2]">
             {nav}
           </aside>
         </div>
       ) : null}
 
-      <aside className="hidden w-56 shrink-0 flex-col border-r border-border bg-[#0a0c10] lg:flex">
+      <aside className="sticky top-0 hidden h-screen w-60 shrink-0 flex-col border-r border-border bg-[#eff1eb] lg:flex" data-reveal>
         {nav}
       </aside>
     </>

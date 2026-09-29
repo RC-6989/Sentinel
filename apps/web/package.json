@@ -3,12 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
-    "test": "tsc -p tsconfig.test.json && node --import tsx --test tests/*.test.cjs"
+    "test": "tsc -p tsconfig.test.json && node --require ../../scripts/tsx-windows-user.cjs --import tsx --test tests/*.test.cjs"
   },
   "dependencies": {
     "@sentinel/policy-engine": "workspace:*",

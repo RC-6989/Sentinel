@@ -14,7 +14,7 @@
   },
   "scripts": {
     "typecheck": "tsc --noEmit",
-    "test": "node --import tsx --test src/**/*.test.ts"
+    "test": "node --require ../../scripts/tsx-windows-user.cjs --import tsx --test src/**/*.test.ts"
   },
   "devDependencies": {
     "@types/node": "^22.20.4",
