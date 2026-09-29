@@ -4,7 +4,7 @@
 
 Phases 0–5 are complete locally. The public site remains waitlist-gated. Hosted signup, the Worker/D1 gateway, the visual policy builder, and human review are not available yet. Read [PROJECT.md](PROJECT.md) before changing scope; [the work log](docs/work-log.md) preserves the session history.
 
-This handoff accompanies the combined frontend, gateway, policy, and auth/database preparation changes on `main`, following `12c34ce`. The user requested that the completed work be logged, committed, and pushed. Check `git status`, `git log`, and GitHub CI for the latest repository state before starting another session. There is no applicable `AGENTS.md` in this repository.
+The combined frontend, gateway, policy, and auth/database preparation changes were committed and pushed to `main` as [`d609319`](https://github.com/RC-6989/Sentinel/commit/d609319211735432e5916d93bb33a4569c1acdf2), following `12c34ce`. Its [CI check](https://github.com/RC-6989/Sentinel/actions/runs/36522692395) and paired [Pages workflow](https://github.com/RC-6989/Sentinel/actions/runs/36522691962) both succeeded. This documentation follow-up records those results. Check `git status`, `git log`, and GitHub CI for later repository changes before starting another session. There is no applicable `AGENTS.md` in this repository.
 
 ## What is implemented
 
