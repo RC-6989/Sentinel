@@ -1,5 +1,6 @@
 /**
- * Cloudflare Worker entry — stub for Phase 4 gateway.
+ * Cloudflare Worker entry — deployment stub. The Phase 4 gateway currently
+ * runs in the local Next.js Node/SQLite application.
  * Deployment requires Wrangler + Cloudflare account (manual user steps).
  */
 
@@ -22,7 +23,7 @@ export default {
     return Response.json(
       {
         error: "not_implemented",
-        message: "Sentinel Worker gateway is not implemented yet (Phase 4).",
+        message: "Sentinel Worker gateway is not deployed. Use the local Next.js /v1/tools/{tool_id}/execute route for Phase 4 testing.",
       },
       { status: 501 },
     );

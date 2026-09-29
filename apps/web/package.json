@@ -8,9 +8,10 @@
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
-    "test": "tsc -p tsconfig.test.json && node --test tests/*.test.cjs"
+    "test": "tsc -p tsconfig.test.json && node --import tsx --test tests/*.test.cjs"
   },
   "dependencies": {
+    "@sentinel/policy-engine": "workspace:*",
     "ajv": "^8.20.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
@@ -32,6 +33,7 @@
     "eslint": "^9",
     "eslint-config-next": "15.5.7",
     "tailwindcss": "^4",
+    "tsx": "^4.23.12",
     "typescript": "^5"
   }
 }

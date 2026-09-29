@@ -17,7 +17,7 @@ export default async function AgentsPage({ searchParams }: { searchParams: Promi
 
   return <div className="mx-auto max-w-3xl space-y-8">
     <div><h1 className="text-2xl font-semibold">Agents</h1>
-      <p className="mt-2 text-sm text-muted">Register agents in {org.name} and manage their credentials. Tool execution is not available yet.</p>
+      <p className="mt-2 text-sm text-muted">Register agents in {org.name} and manage their credentials. Keys can call enabled tools in the same project through the local gateway.</p>
     </div>
     {canManage ? <section className="space-y-3 rounded-lg border border-border p-5">
       <h2 className="font-medium">Create agent</h2><CreateAgentForm organizationId={org.id} projects={projects} />

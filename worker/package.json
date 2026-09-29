@@ -5,7 +5,8 @@
   "description": "Cloudflare Worker API gateway for Sentinel",
   "scripts": {
     "dev": "echo \"Wrangler not configured yet — Phase 4. Use apps/web for local API routes.\"",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "test": "tsc -p tsconfig.test.json && node --test tests/*.test.cjs"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20250525.0",

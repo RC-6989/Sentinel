@@ -8,7 +8,20 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+- Phase 5 fail-closed deterministic policy engine with bounded JSON rules, exact context/argument matches, and deny-over-approval-over-allow precedence
+- Project-scoped policy storage, owner/admin JSON editor, tenant/project authorization, transactional audit records, and policy IDs on allowed calls
+- Gateway policy enforcement before outbound dispatch; denied and approval-required calls stop and audit without storing arguments
+- Policy engine, service, and gateway tests, plus hosted auth/D1 integration contract
+- Phase 4 local Node/SQLite gateway at `POST /v1/tools/{tool_id}/execute` for explicitly enabled, project-scoped low/medium risk tools
+- Operator target-origin allowlist, HTTPS by default, global execution kill switch, per-key and per-organization daily quotas, request ID deduplication, target timeout, and bounded JSON responses
+- Call metadata and audit reservation before dispatch, with no stored input, result, or full API key
+- Gateway security tests for identity/scope, input validation, opt-in, target allowlisting, failures, retries, quota, audit rollback, and revocation during execution
+
 - Frontend content audit and research notes in `docs/frontend-audit.md`
+- Frontend positioning strategy, a branded site icon, and a generated link-preview image
+- Hosted auth/database rollout plan and a production dashboard gate requiring explicit durable storage and a real auth secret
+- Internal D1 account/session store with atomic workspace creation and opaque revocable sessions; public routes remain disabled
+- Staging-only D1 binding and shared migration directory for the user-created `sentinel-staging` database
 - Clearly labeled, user-controlled tool-call examples and public build status
 
 - Phase 3: project-scoped tool registration, editing, risk classification, and active/disabled controls
@@ -29,6 +42,8 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Replace invented SDK usage, simulated live activity, risk scores, and inactive approval controls with an honest explanation of the planned product
 - Replace unavailable dashboard metrics and auth security claims with explicit availability states
 - Rework marketing hierarchy, responsive layout, focus indicators, email labels, feedback, and contrast; remove decorative autoplay
+- Sharpen the homepage promise around deciding before agent actions, with concrete refund examples and accurate build-stage labels
+- Make signup create the user, first organization, project, and audit record atomically; return a usable error if account creation fails
 
 - Convert SQLite query rows to plain objects before passing them to React client components, fixing the post-signup dashboard crash
 - Remove build-time Google Fonts requests that could trigger Next.js 15.5.7's font URL extension parser failure in GitHub CI
@@ -42,11 +57,11 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Local SQLite persistence via `node:sqlite` (D1-compatible schema)
 - Marketing landing with illustrative tool-call scenarios and early-access waitlist
 - Settings: profile, org details, create project/organization
-- Explicit "not available yet" pages for Policies–Incidents (no fake success)
+- Explicit "not available yet" pages for Approvals–Incidents (no fake success)
 
 ### Planned
 
-- Phase 4+: Gateway, policies, approvals, SDKs
+- Phase 6+: Visual policy builder, approvals, Worker/D1 deployment, SDKs
 
 ## [0.1.0] — 2026-08-14
 

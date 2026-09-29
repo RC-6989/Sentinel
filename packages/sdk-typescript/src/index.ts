@@ -1,6 +1,6 @@
 /**
  * @sentinel/sdk — TypeScript client stub (Phase 15).
- * Does not bypass Sentinel; execute() will fail until the gateway exists.
+ * Does not bypass Sentinel; execute() remains unavailable until the Phase 15 SDK.
  */
 
 export interface SentinelOptions {
@@ -25,7 +25,7 @@ export class Sentinel {
 
   /**
    * Execute a tool call through Sentinel.
-   * Not implemented until Phase 4/15 — throws by design (no silent bypass).
+   * Not implemented until Phase 15 — throws by design (no silent bypass).
    */
   async execute(
     _toolName: string,
@@ -36,7 +36,7 @@ export class Sentinel {
     void this.baseUrl;
     void this.timeoutMs;
     throw new Error(
-      "Sentinel SDK execute() is not implemented yet. Gateway lands in Phase 4; full SDK in Phase 15.",
+      "Sentinel SDK execute() is not implemented yet. Use the local HTTP gateway directly; full SDK lands in Phase 15.",
     );
   }
 

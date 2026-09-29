@@ -1,6 +1,7 @@
 import { getDb, newId } from "./db";
 import { getOrganizationForUser, writeAudit } from "./orgs";
 import { normalizeToolSchema, ToolInputError, validateToolInput } from "./tool-schema";
+import { parseToolTarget } from "./tool-target";
 
 export { ToolInputError } from "./tool-schema";
 export type Tool = {
@@ -8,8 +9,12 @@ export type Tool = {
   description: string; risk_level: "low" | "medium" | "high" | "critical";
   status: "active" | "disabled"; input_schema_json: string;
   created_at: string; updated_at: string; project_name: string; environment: string;
+  target_url: string | null; execution_enabled: number;
 };
-export type ToolDetails = { name: string; description: string; riskLevel: string; inputSchema: string };
+export type ToolDetails = {
+  name: string; description: string; riskLevel: string; inputSchema: string;
+  targetUrl?: string; executionEnabled?: boolean;
+};
 
 function authorize(userId: string, organizationId: string, write = false) {
   const org = getOrganizationForUser(userId, organizationId);
@@ -45,7 +50,13 @@ function details(organizationId: string, projectId: string, input: ToolDetails, 
   if (!["low", "medium", "high", "critical"].includes(input.riskLevel)) throw new ToolInputError("Choose a valid risk level.");
   if (getDb().prepare("SELECT id FROM tools WHERE organization_id = ? AND project_id = ? AND name = ? AND id != ?")
     .get(organizationId, projectId, name, toolId)) throw new ToolInputError("A tool with this name already exists in this project.");
-  return { name, schema: normalizeToolSchema(input.inputSchema) };
+  const targetUrl = input.targetUrl?.trim() || null;
+  if (targetUrl) parseToolTarget(targetUrl, !!input.executionEnabled);
+  if (input.executionEnabled && !targetUrl) throw new ToolInputError("Add an allowed target URL before enabling execution.");
+  if (input.executionEnabled && ["high", "critical"].includes(input.riskLevel)) {
+    throw new ToolInputError("High and critical risk tools require an approval workflow before execution can be enabled.");
+  }
+  return { name, schema: normalizeToolSchema(input.inputSchema), targetUrl, executionEnabled: input.executionEnabled ? 1 : 0 };
 }
 
 export function listTools(userId: string, organizationId: string): Tool[] {
@@ -56,6 +67,13 @@ export function listTools(userId: string, organizationId: string): Tool[] {
   return rows.map(row => ({ ...row }));
 }
 
+export function countToolCalls(userId: string, organizationId: string): number {
+  authorize(userId, organizationId);
+  const row = getDb().prepare("SELECT COUNT(*) AS count FROM tool_calls WHERE organization_id = ?")
+    .get(organizationId) as { count: number };
+  return row.count;
+}
+
 export function createTool(userId: string, organizationId: string, projectId: string, input: ToolDetails) {
   return transaction(() => {
     authorize(userId, organizationId, true);
@@ -64,9 +82,9 @@ export function createTool(userId: string, organizationId: string, projectId: st
     }
     const clean = details(organizationId, projectId, input);
     const id = newId("tol");
-    getDb().prepare(`INSERT INTO tools (id, organization_id, project_id, name, description, risk_level, input_schema_json)
-      VALUES (?, ?, ?, ?, ?, ?, ?)`)
-      .run(id, organizationId, projectId, clean.name, input.description.trim(), input.riskLevel, clean.schema);
+    getDb().prepare(`INSERT INTO tools (id, organization_id, project_id, name, description, risk_level, input_schema_json, target_url, execution_enabled)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`)
+      .run(id, organizationId, projectId, clean.name, input.description.trim(), input.riskLevel, clean.schema, clean.targetUrl, clean.executionEnabled);
     writeAudit({ organizationId, actorUserId: userId, action: "tool.created", resourceType: "tool", resourceId: id });
     return id;
   });
@@ -79,8 +97,8 @@ export function updateTool(userId: string, organizationId: string, toolId: strin
     if (!["active", "disabled"].includes(status)) throw new ToolInputError("Choose a valid tool status.");
     const clean = details(organizationId, tool.project_id, input, toolId);
     getDb().prepare(`UPDATE tools SET name = ?, description = ?, risk_level = ?, input_schema_json = ?,
-      status = ?, updated_at = datetime('now') WHERE organization_id = ? AND id = ?`)
-      .run(clean.name, input.description.trim(), input.riskLevel, clean.schema, status, organizationId, toolId);
+      target_url = ?, execution_enabled = ?, status = ?, updated_at = datetime('now') WHERE organization_id = ? AND id = ?`)
+      .run(clean.name, input.description.trim(), input.riskLevel, clean.schema, clean.targetUrl, clean.executionEnabled, status, organizationId, toolId);
     writeAudit({ organizationId, actorUserId: userId, action: "tool.updated", resourceType: "tool", resourceId: toolId });
   });
 }

@@ -1,11 +1,15 @@
-# Cloudflare Worker (future)
+# Cloudflare Worker — hosted routes are still under construction.
 
 name = "sentinel-api"
 main = "src/index.ts"
 compatibility_date = "2025-08-01"
 
-# Uncomment and configure after creating a D1 database (manual Wrangler steps):
-# [[d1_databases]]
-# binding = "DB"
-# database_name = "sentinel"
-# database_id = "<from wrangler d1 create>"
+# Use --env staging for this binding. Production has no database configured.
+[env.staging]
+name = "sentinel-api-staging"
+
+[[env.staging.d1_databases]]
+binding = "DB"
+database_name = "sentinel-staging"
+database_id = "079c720c-db3e-44e1-a903-b4129a70ff24"
+migrations_dir = "../migrations"

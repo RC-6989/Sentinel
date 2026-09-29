@@ -1,6 +1,6 @@
 # Agents and API keys (Phase 2)
 
-Sentinel currently runs the dashboard and identity endpoint in Next.js with local SQLite. The Cloudflare Worker and D1 binding remain future work. No tool execution or policy enforcement is available yet.
+Sentinel currently runs the dashboard, identity endpoint, and optional [local execution gateway](gateway.md) in Next.js with local SQLite. The Cloudflare Worker and D1 binding remain future work. Policy enforcement is not available yet.
 
 ## Local setup
 
@@ -23,7 +23,7 @@ curl http://localhost:3000/api/v1/identity \
   -H 'Authorization: Bearer <your-api-key>'
 ```
 
-A valid credential returns `keyId`, `organizationId`, `agentId`, and `projectId`. Invalid, expired, revoked, or paused-agent credentials receive the same 401 response. Responses are not cached. This endpoint verifies identity only; it does not execute tools or grant dashboard access.
+A valid credential returns `keyId`, `organizationId`, `agentId`, and `projectId`. Invalid, expired, revoked, or paused-agent credentials receive the same 401 response. Responses are not cached. This endpoint verifies identity only; it does not execute tools or grant dashboard access. A separate `/v1/tools/{tool_id}/execute` route handles explicitly enabled local tool execution.
 
 ## Lifecycle and security
 
@@ -49,4 +49,4 @@ The service tests use temporary databases and exercise the production service fu
 
 Manual smoke: sign up, create an agent, issue a key, check the identity endpoint, rotate the key (old key must fail), pause/resume, revoke, and reload the page to verify the secret is no longer displayed. Create another organization and verify its agent list is separate.
 
-Tool registration and JSON Schema validation are now available; see [Tools (Phase 3)](tools.md). Gateway execution is next (Phase 4).
+Tool registration and JSON Schema validation are available; see [Tools (Phase 3)](tools.md). The constrained local gateway is documented in [Gateway](gateway.md), and its deterministic rules are described in [Policies](policies.md). Hosted auth and execution are still pending.

@@ -17,7 +17,7 @@ export function ToolCallExample() {
 
   return (
     <figure className="tool-example" aria-labelledby="example-title">
-      <figcaption className="example-caption"><span id="example-title">A tool call, checked.</span><span className="example-label">Illustrative example</span></figcaption>
+      <figcaption className="example-caption"><span id="example-title">One tool. Three decisions.</span><span className="example-label">Illustrative example</span></figcaption>
       <div className="example-options" role="group" aria-label="Choose an illustrative tool call">
         {examples.map((item, index) => <button key={item.label} type="button" aria-pressed={selected === index} onClick={() => setSelected(index)}>{item.label}</button>)}
       </div>

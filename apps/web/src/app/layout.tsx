@@ -27,9 +27,17 @@ const syne = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Sentinel — Tool governance for AI agents",
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || "https://trysentinelapp.vercel.app"),
+  title: "Sentinel — Set the rules before AI agents act",
   description:
-    "Sentinel is building policy checks and human approvals for AI agent tool calls. Explore the planned workflow and join the early-access waitlist.",
+    "Sentinel is building a checkpoint for AI agent tool calls: allow routine work, block disallowed actions, and hold sensitive requests for approval. Join the early-access waitlist.",
+  openGraph: {
+    title: "Sentinel — Set the rules before AI agents act",
+    description: "A checkpoint for AI agent tool calls. Early access in development.",
+    siteName: "Sentinel",
+    type: "website",
+  },
+  twitter: { card: "summary_large_image" },
 };
 
 export default function RootLayout({

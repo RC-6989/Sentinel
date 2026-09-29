@@ -1,13 +1,14 @@
 import { cookies } from "next/headers";
 import { SignJWT, jwtVerify } from "jose";
 import { getDb, hashToken, newId } from "./db";
+import { configuredAuthSecret } from "./deployment";
 
 const SESSION_COOKIE = "sentinel_session";
 const SESSION_DAYS = 14;
 
 function sessionSecret() {
   const secret = process.env.AUTH_SECRET;
-  if (!secret || secret.length < 32) {
+  if (!configuredAuthSecret(secret)) {
     // Local-only fallback — production must set AUTH_SECRET
     if (process.env.NODE_ENV === "production") {
       throw new Error("AUTH_SECRET must be set (min 32 chars) in production");

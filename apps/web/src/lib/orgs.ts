@@ -62,7 +62,9 @@ export function createOrganization(
   const memberId = newId("mem");
   const projectId = newId("prj");
 
-  db.exec("BEGIN");
+  // A savepoint also works when signup already holds a transaction, so the
+  // account and its initial workspace can commit or roll back together.
+  db.exec("SAVEPOINT create_organization");
   try {
     db.prepare(
       `INSERT INTO organizations (id, name, slug) VALUES (?, ?, ?)`,
@@ -79,9 +81,10 @@ export function createOrganization(
       `INSERT INTO audit_logs (id, organization_id, actor_user_id, action, resource_type, resource_id)
        VALUES (?, ?, ?, 'organization.created', 'organization', ?)`,
     ).run(newId("aud"), id, userId, id);
-    db.exec("COMMIT");
+    db.exec("RELEASE SAVEPOINT create_organization");
   } catch (e) {
-    db.exec("ROLLBACK");
+    db.exec("ROLLBACK TO SAVEPOINT create_organization");
+    db.exec("RELEASE SAVEPOINT create_organization");
     throw e;
   }
 

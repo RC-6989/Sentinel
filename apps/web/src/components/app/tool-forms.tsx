@@ -39,10 +39,16 @@ function DetailsFields({ tool }: { tool?: Tool }) {
     <label className="block text-sm">Risk level<select name="riskLevel" defaultValue={tool?.risk_level ?? "medium"} className={selectClass}>
       <option value="low">Low</option><option value="medium">Medium</option><option value="high">High</option><option value="critical">Critical</option>
     </select></label>
-    <p className="text-xs text-muted">Your risk classification will inform future policies. It does not enforce a policy yet.</p>
+    <p className="text-xs text-muted">This risk classification can be matched by project policy rules. It is supplied by your organization, not calculated by Sentinel.</p>
     <label className="block text-sm">Input JSON Schema<textarea name="inputSchema" required maxLength={16384} rows={12} spellCheck={false}
       defaultValue={tool ? JSON.stringify(JSON.parse(tool.input_schema_json), null, 2) : exampleSchema} className={textareaClass} /></label>
     <p className="text-xs text-muted">Use an object schema with properties, required fields, arrays, enums, and size or numeric limits. Maximum 16 KiB. References, patterns, formats, and schema combinations are not supported yet.</p>
+    <label className="block text-sm">HTTPS target URL (optional)<Input name="targetUrl" type="url" defaultValue={tool?.target_url ?? ""} maxLength={2048} placeholder="https://api.example.com/execute" /></label>
+    <p className="text-xs text-muted">Sentinel posts validated JSON to this URL. The server operator must allow its exact origin. No credentials or query strings are supported.</p>
+    <label className="flex items-start gap-2 text-sm"><input name="executionEnabled" type="checkbox" defaultChecked={tool?.execution_enabled === 1} className="mt-1" />
+      <span>Enable live execution for this tool. Only low and medium risk tools can run until the approval workflow is available.</span>
+    </label>
+    <p className="text-xs text-muted">Execution is off by default. Enabled calls still require an active matching allow policy, an agent API key, a unique idempotency key, and quota headroom.</p>
   </>;
 }
 

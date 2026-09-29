@@ -104,7 +104,7 @@ Every tenant-owned object must associate with an organization. Never authorize o
 
 ## Build phases (do not jump ahead)
 
-Current progress (2026-09-27): Phases 0–3 are implemented locally. The tool registry supports project-scoped definitions, risk classification, active/disabled status, and bounded JSON Schema input validation. Next: Phase 4 gateway execution. Worker/D1 deployment, policy enforcement, and approvals remain unimplemented; the dashboard still uses local SQLite.
+Current progress (2026-09-29): Phases 0–5 are implemented locally. The project-scoped tool registry has bounded JSON Schema validation. The opt-in Node/SQLite gateway dispatches low/medium risk tools only to operator-allowed targets when a deterministic project policy allows them, with auth, quotas, idempotency, and call metadata. A JSON policy editor is available; the visual builder is Phase 6. Worker/D1 gateway deployment and human approvals remain unimplemented. The user provisioned staging D1; its account/session foundation and all six migrations are verified locally, but hosted auth and product adapters are not connected.
 
 | Phase | Focus |
 | --- | --- |
@@ -170,6 +170,6 @@ A stranger can sign up, create org/agent/tool/policy, generate an API key, send 
 - Keep the app runnable after each phase
 - Before completion: lint, typecheck, tests, build, smoke test
 
-## Session handoff (2026-09-27)
+## Session handoff (2026-09-29)
 
-See [SESSION_HANDOFF.md](./SESSION_HANDOFF.md) for the current uncommitted Phase 3 implementation, the 2026-09-27 CI failure and fix, completed checks, concurrent working-tree edits to preserve, and the exact next steps.
+See [SESSION_HANDOFF.md](./SESSION_HANDOFF.md) for the current state and [docs/work-log.md](./docs/work-log.md) for a dated record of progress and next steps.

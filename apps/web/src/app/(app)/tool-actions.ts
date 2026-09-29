@@ -15,7 +15,10 @@ export async function toolAction(_previous: ToolFormState, form: FormData): Prom
     return typeof value === "string" ? value : "";
   };
   const orgId = field("organizationId");
-  const input = { name: field("name"), description: field("description"), riskLevel: field("riskLevel"), inputSchema: field("inputSchema") };
+  const input = {
+    name: field("name"), description: field("description"), riskLevel: field("riskLevel"), inputSchema: field("inputSchema"),
+    targetUrl: field("targetUrl"), executionEnabled: field("executionEnabled") === "on",
+  };
   try {
     switch (field("operation")) {
       case "create":

@@ -5,8 +5,8 @@ import { WaitlistForm } from "@/components/marketing/waitlist-form";
 
 const workflow = [
   { title: "Route the tool call", body: "Your agent sends a tool request to Sentinel before it reaches the underlying API. Only calls routed through Sentinel are in scope." },
-  { title: "Check your rules", body: "The planned policy engine checks the tool, its arguments, and the environment against rules your team defines." },
-  { title: "Decide before execution", body: "Allow the request, deny it, or hold it for human review. The planned audit trail records the decision and its reason." },
+  { title: "Check your rules", body: "The local policy engine checks the tool, its arguments, and the environment against rules your team defines." },
+  { title: "Decide before execution", body: "Allow or deny the request before dispatch. An approval requirement currently stops execution; the human review workflow is planned." },
 ];
 
 export default function HomePage() {
@@ -30,14 +30,14 @@ export default function HomePage() {
       <main id="main-content" tabIndex={-1}>
         <section className="marketing-container hero" aria-labelledby="hero-title">
           <div className="hero-copy">
-            <p className="eyebrow"><span className="status-marker" aria-hidden="true" /> AI agent tool governance</p>
-            <h1 id="hero-title">Give your agents<br />clear limits.</h1>
-            <p className="hero-description">Sentinel is being built to check AI agents’ tool calls against your rules, block disallowed actions, and hold sensitive requests for human approval.</p>
+            <p className="eyebrow"><span className="status-marker" aria-hidden="true" /> For teams shipping AI agents</p>
+            <h1 id="hero-title">Set the rules<br />before agents act.</h1>
+            <p className="hero-description">Sentinel is building a checkpoint between AI agents and the tools they use. Decide which calls can proceed, which should stop, and which need a person’s approval before they reach your API.</p>
             <div className="hero-actions">
               <a href="#waitlist" className="marketing-button">Join the waitlist <ArrowUpRight size={18} aria-hidden="true" /></a>
               <a href="#how-it-works" className="text-link">Explore the workflow <ArrowDown size={16} aria-hidden="true" /></a>
             </div>
-            <p className="hero-availability">In development. Tool-call enforcement is not available yet.</p>
+            <p className="hero-availability"><span aria-hidden="true">●</span> In development. Hosted enforcement and human approvals are not live yet.</p>
           </div>
           <ToolCallExample />
         </section>
@@ -53,10 +53,10 @@ export default function HomePage() {
 
         <section id="how-it-works" className="marketing-container editorial-section" aria-labelledby="workflow-title">
           <div className="section-intro">
-            <p className="eyebrow">01 / The workflow</p>
-            <h2 id="workflow-title">A checkpoint before<br />the API call.</h2>
-            <p>A refund, an email, a database write. Each tool call is a concrete action with consequences. Sentinel’s planned gateway puts your rules at that boundary.</p>
-            <span className="plain-status">Planned functionality</span>
+            <p className="eyebrow">01 / Why this boundary matters</p>
+            <h2 id="workflow-title">An instruction isn’t<br />a permission check.</h2>
+            <p>A prompt can tell a support agent to keep refunds under $50. It cannot enforce that limit when the agent asks to issue $129. Sentinel is designed to check the request before the refund API runs.</p>
+            <span className="plain-status">Local policy checks · human review planned</span>
           </div>
           <ol className="workflow-list">
             {workflow.map((step, index) => (
@@ -76,9 +76,11 @@ export default function HomePage() {
               <p>Sentinel is in early development. The public site is a waitlist; the working foundation is available in local development.</p>
             </div>
             <div className="build-list">
-              <div className="build-row"><span className="build-label available">Available locally</span><div><h3>Agent and access management</h3><p>Accounts, organizations, projects, agent registration, and scoped API keys with rotation and revocation. Tool registration and input validation are also available locally.</p></div></div>
-              <div className="build-row"><span className="build-label">Next</span><div><h3>Execution gateway</h3><p>Route tool calls through Sentinel before they reach an API.</p></div></div>
-              <div className="build-row"><span className="build-label">Planned</span><div><h3>Policies, approvals, and audit</h3><p>Rule evaluation, human review, risk assessment, and a searchable history of tool-call decisions.</p></div></div>
+              <div className="build-row"><span className="build-label available">Available locally</span><div><h3>Agent and access management</h3><p>Accounts, organizations, projects, agent registration, and scoped API keys with rotation and revocation.</p></div></div>
+              <div className="build-row"><span className="build-label available">Available locally</span><div><h3>Tool setup and input checks</h3><p>Register a tool, define its input schema, and validate sample arguments.</p></div></div>
+              <div className="build-row"><span className="build-label available">Available locally</span><div><h3>Limited execution gateway</h3><p>Opted-in, allowlisted tools can receive authenticated calls after input validation and an explicit allow policy.</p></div></div>
+              <div className="build-row"><span className="build-label available">Available locally</span><div><h3>Deterministic policy checks</h3><p>Project rules can allow, deny, or require approval. Approval requirements currently block execution; no reviewer workflow runs yet.</p></div></div>
+              <div className="build-row"><span className="build-label">Planned</span><div><h3>Human review and decision history</h3><p>A reviewer approval workflow, risk assessment, and a searchable history of tool-call decisions.</p></div></div>
               <div className="build-row"><span className="build-label">Planned</span><div><h3>SDKs and detection</h3><p>TypeScript and Python integrations, suspicious-content checks, and behavioral monitoring.</p></div></div>
             </div>
           </div>
@@ -91,15 +93,15 @@ export default function HomePage() {
           </div>
           <div className="question-list">
             <details open><summary>Where would Sentinel sit in my stack?</summary><p>Between your agent runtime and the tools it calls. You would need to route those requests through the gateway. Calls made directly to an API would remain outside Sentinel’s control.</p></details>
-            <details><summary>Does it need an LLM to make decisions?</summary><p>The planned core uses deterministic rules, so policy decisions would not require a paid LLM API. Optional model-based detection is planned separately and would be disabled by default.</p></details>
-            <details><summary>Can I use it to protect production agents today?</summary><p>No. The execution gateway, policy enforcement, and human approval workflow are not implemented yet. The examples on this page illustrate the intended behavior.</p></details>
+            <details><summary>Does it need an LLM to make decisions?</summary><p>No. The local policy engine uses deterministic rules without an LLM API. Optional model-based detection is planned separately and would be disabled by default.</p></details>
+            <details><summary>Can I use it to protect production agents today?</summary><p>No. Gateway execution and policy checks run locally. A deployed gateway and human approval workflow are not available. The approval example above illustrates the intended review flow.</p></details>
             <details><summary>Will it catch every unsafe action?</summary><p>No. Sentinel is intended to be one layer of protection. It would still depend on the rules you configure and the tool calls you route through it. Tool permissions and application-level validation remain necessary.</p></details>
           </div>
         </section>
 
         <section id="waitlist" className="waitlist-section" aria-labelledby="waitlist-title">
           <div className="marketing-container waitlist-inner">
-            <div><p className="eyebrow">Follow the build</p><h2 id="waitlist-title">Building agents that<br />take real actions?</h2><p>Join the waitlist for updates on early access to Sentinel.</p></div>
+            <div><p className="eyebrow">Follow the build</p><h2 id="waitlist-title">Building agents that<br />take real actions?</h2><p>Join the waitlist to hear when Sentinel opens for early access.</p></div>
             <div className="waitlist-form-wrap"><WaitlistForm size="lg" /><p className="waitlist-note">Joining the list does not create an account or grant product access.</p></div>
           </div>
         </section>

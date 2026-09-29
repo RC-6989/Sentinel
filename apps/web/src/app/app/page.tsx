@@ -1,8 +1,9 @@
 import Link from "next/link";
 import { listAgents } from "@/lib/agents";
-import { listTools } from "@/lib/tools";
+import { countToolCalls, listTools } from "@/lib/tools";
 import { getCurrentUser } from "@/lib/auth";
 import { getOrganizationForUser, listOrganizationsForUser, listProjects } from "@/lib/orgs";
+import { countBlockedCalls } from "@/lib/policies";
 import { buttonStyles } from "@/components/ui/button";
 import { redirect, notFound } from "next/navigation";
 
@@ -19,12 +20,14 @@ export default async function OverviewPage({ searchParams }: { searchParams: Pro
 
   const agents = listAgents(user.id, org.id);
   const tools = listTools(user.id, org.id);
+  const toolCallCount = countToolCalls(user.id, org.id);
+  const blockedCount = countBlockedCalls(user.id, org.id);
 
   const kpis = [
     { label: "Registered Agents", value: String(agents.length), hint: `${agents.filter(a => a.status === "active").length} active` },
     { label: "Registered Tools", value: String(tools.length), hint: `${tools.filter(t => t.status === "active").length} active` },
-    { label: "Tool Calls", value: "—", hint: "Gateway not available yet" },
-    { label: "Blocked Actions", value: "—", hint: "Policy enforcement not available" },
+    { label: "Tool Calls", value: String(toolCallCount), hint: "Gateway dispatch attempts" },
+    { label: "Blocked Actions", value: String(blockedCount), hint: "Policy denials and approval holds" },
     { label: "Pending Approvals", value: "—", hint: "Approval workflow not available" },
     { label: "Security Incidents", value: "—", hint: "Incident detection not available" },
   ];
@@ -56,12 +59,13 @@ export default async function OverviewPage({ searchParams }: { searchParams: Pro
         <h2 className="text-sm font-medium">{agents.length ? "Manage your agents" : "Register your first agent"}</h2>
         <p className="mt-2 max-w-xl text-sm leading-relaxed text-muted">
           Register agents, manage their API keys, and define tools with input
-          schemas. Gateway execution will be available in Phase 4.
+          schemas. Opted-in low or medium risk tools can run through the local gateway when a project policy allows them.
         </p>
         <div className="mt-4 flex flex-wrap gap-3">
           <Link href={`/app/settings?org=${org.id}`} className={buttonStyles({ size: "sm" })}>Open settings</Link>
           <Link href={`/app/agents?org=${org.id}`} className={buttonStyles({ size: "sm", variant: "secondary" })}>Manage agents</Link>
           <Link href={`/app/tools?org=${org.id}`} className={buttonStyles({ size: "sm", variant: "secondary" })}>Manage tools</Link>
+          <Link href={`/app/policies?org=${org.id}`} className={buttonStyles({ size: "sm", variant: "secondary" })}>Manage policies</Link>
         </div>
       </section>
 

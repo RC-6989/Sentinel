@@ -12,7 +12,7 @@ Defense in depth for autonomous agents — without requiring paid LLM inference 
 
 ## Status
 
-Phase 3 implemented locally: authentication, organizations/projects, agents, scoped API keys, and a tool registry with risk classification and JSON Schema input validation. The Worker gateway is still a stub; execution is next (Phase 4). See [PROJECT.md](./PROJECT.md) and [CHANGELOG.md](./CHANGELOG.md).
+Phases 0–5 are implemented locally: authentication, organizations/projects, agents, scoped API keys, a tool registry with JSON Schema input validation, an opt-in HTTP execution gateway, and fail-closed deterministic project policies. The Cloudflare Worker gateway and hosted auth/database integration are still in progress; a visual policy builder and human approval workflow come later. See [PROJECT.md](./PROJECT.md), [policy documentation](docs/policies.md), and [CHANGELOG.md](./CHANGELOG.md).
 
 ## Stack (planned)
 
@@ -64,9 +64,9 @@ curl http://localhost:3000/api/health
 
 Copy `.env.example` to `apps/web/.env.local`. Never commit secrets.
 
-Local development exposes `/signup`, `/login`, and `/app`. Production remains in waitlist mode unless `SENTINEL_WAITLIST_MODE=false` is explicitly set. The dashboard currently requires a persistent local SQLite filesystem; it is not ready for serverless deployment.
+Local development exposes `/signup`, `/login`, and `/app`. Production remains in waitlist mode unless it is explicitly opened on a host with persistent SQLite storage, a real `AUTH_SECRET`, `SENTINEL_DATA_DIR`, and `SENTINEL_PERSISTENT_STORAGE_CONFIRMED=true`. The dashboard is not ready for serverless deployment. See the [hosted auth and database rollout](docs/auth-db-rollout.md) before opening it to users.
 
-See [agent and API key setup](docs/agents.md) and [tool registration and input validation](docs/tools.md) for usage and verification. Fonts are bundled locally, so builds do not need access to Google Fonts.
+See [agent and API key setup](docs/agents.md), [tool registration and input validation](docs/tools.md), and [the local gateway](docs/gateway.md) for usage and verification. Fonts are bundled locally, so builds do not need access to Google Fonts.
 
 ## Cost & constraints
 

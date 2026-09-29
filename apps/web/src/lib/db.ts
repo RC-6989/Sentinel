@@ -29,7 +29,7 @@ function applyMigrations(db: DatabaseSync) {
     );
   `);
 
-  const files = ["0000_init.sql", "0001_saas_foundation.sql", "0002_agents_api_keys.sql", "0003_tools.sql"];
+  const files = ["0000_init.sql", "0001_saas_foundation.sql", "0002_agents_api_keys.sql", "0003_tools.sql", "0004_tool_execution.sql", "0005_policies.sql"];
   for (const file of files) {
     const version = file.replace(/\.sql$/, "");
     const existing = db

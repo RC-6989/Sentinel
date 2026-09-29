@@ -6,7 +6,7 @@ Owners and admins can register/edit tools and change their active/disabled statu
 
 Expand **Test input** to check a JSON object against the saved schema. The result reports validation success or the first schema violation. The tester uses the current saved definition and does not store sample input. It also works for disabled tools so their definitions can be checked before re-enabling them.
 
-Registration and validation do not execute a tool, grant an agent access, or enforce policy. Risk levels are user-supplied classifications, not computed assessments. The execution gateway is Phase 4; policy enforcement follows in Phase 5. Endpoint configuration and tool credentials are not collected yet.
+Registration and the **Test input** form do not execute a tool, grant an agent access, or evaluate policy. Risk levels are user-supplied classifications, not computed assessments. The separate [local execution gateway](gateway.md) dispatches eligible low or medium risk tools only when an active [project policy](policies.md) allows the call. Target authentication credentials are not collected yet.
 
 ## Supported schemas
 

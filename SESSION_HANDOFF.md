@@ -1,45 +1,52 @@
-# Sentinel handoff — 2026-09-27
+# Sentinel handoff — 2026-09-29
 
-## Repository state
+## Current state
 
-- Workspace: `/Users/rohitchavali/Desktop/Sentinel`
-- Branch: `main`, at `3f3b8680953b8146a56313e23bfa540baa5e17f1` (`Working on backend`); same commit as `origin/main` when checked.
-- Work is intentionally **uncommitted and unpushed**. The user asked to save progress and stop for now.
-- Preserve the whole current working tree. In particular, there are simultaneous landing page/marketing updates, a new `docs/frontend-audit.md`, and removed/replaced marketing components mixed into the tree. They were not reverted. The font changes in `apps/web/src/app/layout.tsx` overlap a concurrent branding/CSS update; keep both the local font imports and the current metadata/CSS variables.
-- There is no applicable `AGENTS.md` in this repository.
+Phases 0–5 are complete locally. The public site remains waitlist-gated. Hosted signup, the Worker/D1 gateway, the visual policy builder, and human review are not available yet. Read [PROJECT.md](PROJECT.md) before changing scope; [the work log](docs/work-log.md) preserves the session history.
 
-## Why the GitHub check failed
+This handoff accompanies the combined frontend, gateway, policy, and auth/database preparation changes on `main`, following `12c34ce`. The user requested that the completed work be logged, committed, and pushed. Check `git status`, `git log`, and GitHub CI for the latest repository state before starting another session. There is no applicable `AGENTS.md` in this repository.
 
-The latest push at this commit had two workflow runs. The `CI / check` run [36285635420](https://github.com/RC-6989/Sentinel/actions/runs/36285635420) passed install, lint, tests (10/10), and typecheck, then failed during `pnpm --filter @sentinel/web build`. The log puts the error in Next.js 15.5.7's `next/font/google` loader: it calls `[...].exec(googleFontFileUrl)[1]` without checking for a regex match. A Google Fonts response with any URL that does not end in `.woff`, `.woff2`, `.eot`, `.ttf`, or `.otf` causes the reported `Cannot read properties of null (reading '1')`. The workflow run paired with it, [36285635236](https://github.com/RC-6989/Sentinel/actions/runs/36285635236), succeeded. Local current Google Fonts CSS did not reproduce the anomalous response, but the Google fetch is a build-time network dependency and the loader assumption is unguarded.
+## What is implemented
 
-The fix now uses `next/font/local` and bundles the three existing fonts (IBM Plex Sans, IBM Plex Mono, Syne), their SIL OFLs, source URLs, and SHA-256 provenance under `apps/web/src/app/fonts/`. A fresh build passed with an empty `NEXT_FONT_GOOGLE_MOCKED_RESPONSES` map, which ensures any Google-font lookup would fail. No `next/font/google` import remains under `apps/web/src`.
+- The landing page describes agent tool-call controls using a concrete refund example, with illustrative allow/block/approval states, explicit availability, and a public waitlist. Copy, metadata, icons, mobile navigation, and layout were refined using [the frontend research and strategy](docs/frontend-strategy.md). The demo does not execute a real tool.
+- Local signup/login/logout, organizations/projects, agents/API keys, and tool definitions work through Next.js and SQLite. Signup creates the user, owner membership, default project, and audits atomically. Production dashboard access requires an explicit durable data path, persistent-storage confirmation, a real auth secret, and waitlist mode disabled. Those flags cannot make a Vercel filesystem durable.
+- The local `POST /v1/tools/{tool_id}/execute` gateway requires a project-bound agent key, an explicitly enabled low/medium-risk tool, an operator-allowlisted exact HTTPS origin, schema-valid input, and an allowing policy. It reserves idempotency and metadata audits before dispatch, enforces quotas, bounds requests/responses and time, and does not store payloads. See [gateway behavior and limits](docs/gateway.md).
+- Phase 5 provides a bounded, deterministic, portable policy evaluator and a project-scoped JSON policy editor. Deny overrides approval, which overrides allow; no matching allow denies. Policy authorization and dispatch reservation share a transaction. Denial and approval-required decisions do not dispatch; invalid active rules fail closed. Blocked audits have an organization quota. See [policy behavior](docs/policies.md).
+- High/critical-risk execution remains disabled. An approval policy returns a hold; it does not create a reviewer workflow. Exact-origin checks also need production outbound-network protection because they do not pin DNS.
+- The internal D1 account/session store supports atomic workspace creation, normalized unique email, opaque hashed session tokens, expiry, and revocation. It has no public API or Next.js adapter yet. The Worker entry remains a deployment stub.
+- Bundled, licensed local fonts avoid the earlier Google Fonts build dependency. Preserve their provenance and the plain-object conversion of SQLite rows passed to React.
 
-## Work completed in this session
+## Staging database and user setup
 
-1. Removed the font fetch at build time and retained local font use and licensing.
-2. Implemented Phase 3 tool registry: new SQLite/D1-compatible `migrations/0003_tools.sql`, automatic SQLite migration, project-bound tenant-scoped tools, risk classification, active/disabled status, owner/admin writes, member reads, unique per-project names, composite organization/project foreign keys, transactional audit records, and server-rendered tools page.
-3. Added bounded draft-07 object JSON Schema validation using Ajv. It rejects unsupported schema keywords, coercion, excessive input/schema sizes, structural complexity, and Ajv's silently ignored `__proto__` property. The tester never stores sample input, authorizes a tool call, or executes a tool. Phase 4 execution and Phase 5 policy enforcement remain future work.
-4. Added tests: existing 10 agent tests plus 14 tool/schema tests (24 total); tests also verify SQLite results become plain objects before React serialization.
-5. Updated project/phase/readme/changelog/docs, added `docs/tools.md`, and linked [PROJECT.md](./PROJECT.md) to this handoff.
-6. Browser smoke testing exposed a real pre-existing Phase 2 crash: `node:sqlite` query rows have null prototypes, and Next/React cannot serialize organization rows passed into client components (`Only plain objects ...`). `listOrganizationsForUser`, `getOrganizationForUser`, `listProjects`, `listAgents`, `listApiKeys`, and `listTools` now return shallow plain objects. This fix is covered in the tests.
+The user created `sentinel-staging` in ENAM, database ID `079c720c-db3e-44e1-a903-b4129a70ff24`. `worker/wrangler.toml` references it only under `env.staging`, using binding `DB` and the shared `../migrations` directory. The generated label `sentinel_staging` was changed to `DB` to match the storage integration; the database itself was not renamed.
 
-## Verification already completed
+All six migrations (`0000`–`0005`) were discovered and applied successfully to the **local D1 simulation** using `--local --env staging`. Remote tables, hosting secrets, and deployment were not changed or confirmed. The default Worker environment has no production database binding.
 
-- `pnpm install --frozen-lockfile --store-dir /tmp/sentinel-pnpm-store`: lockfile current.
-- `pnpm lint`: passed.
-- `pnpm typecheck`: passed after the SQLite serialization fix.
-- `pnpm test`: passed, 24/24.
-- Clean `pnpm --filter @sentinel/web build`: passed after the SQLite serialization fix, with `NEXT_FONT_GOOGLE_MOCKED_RESPONSES=/tmp/sentinel-no-google-fonts.cjs` pointing to an empty mock. (A second clean build was run after that fix.)
-- `git diff --check`: passed.
-- A real Chromium browser verified local health endpoint, signup, dashboard rendering, tool registration, successful sample validation, rejection of `{ "query": 123 }` with `/query: must be string`, and display that the validator does not execute tools. The smoke script then stalled on a Playwright locator while attempting to edit the risk/status fields. This is unresolved **test harness navigation/locator behavior**, not evidence of a product failure. Resume the browser check, inspect/fix the locator, and verify editing, disable/re-enable, persistence after reload, organization isolation, and mobile overflow. The script is at `/tmp/sentinel-browser-check/smoke.cjs` if the temp directory persists; regenerate it if not.
-- The test app used port 3101 and a temporary SQLite directory at `/tmp/sentinel-phase3-smoke-70GaXE`; its processes were stopped at handoff. Do not treat that test data as a user database.
+No Clerk, Auth0, Supabase, or AI API keys are required for this plan. No additional external setup is needed from the user while the hosted adapter is being built. When staging is ready, the user must apply its remote migrations and configure the final server-only secrets in the hosting consoles. Do not request or commit credentials. See [the auth/database rollout](docs/auth-db-rollout.md).
 
-For local reruns in the current macOS environment, Node is available at `/tmp/node-v22.23.3-darwin-arm64/bin/node` and pnpm 10.27.0 was bootstrapped via Corepack. Add that directory to `PATH`. Since `node_modules` currently links to `/tmp/sentinel-pnpm-store/v10`, pass `--store-dir /tmp/sentinel-pnpm-store` to pnpm install/add. CI's frozen-lockfile command needs no special store setting.
+## Auth and database next steps
 
-## Next session
+1. Implement protected, typed Worker account/session endpoints and a Next.js server adapter. Keep browser requests on the site origin. Use server-only service authentication; never expose a Cloudflare token or a generic SQL endpoint. Preserve existing Node `scrypt` password verification compatibility and use an opaque HttpOnly session cookie for the hosted flow.
+2. Move organizations, projects, memberships, agents, keys, tools, policies, calls, and audits to the same D1 backend. Do not connect hosted signup while the dashboard or gateway still reads local SQLite. Preserve tenant authorization, key revocation, quotas, and atomic policy/call reservation as specified in [the integration contract](docs/policy-integration.md).
+3. Add durable signup/login abuse throttles and a usable account recovery path without paid email/SMS. Both are public self-service release blockers.
+4. Apply the ordered migrations to isolated remote staging through manual user setup. Verify signup rollback, email uniqueness, session expiry/revocation, and all product flows across fresh instances. Test cross-tenant denial, bounded dispatch, quotas, idempotency, and secret handling.
+5. Open hosted auth only after the staging release gate passes and every visible action uses durable storage. Keep the public gate closed until then. Recheck provider free-plan limits before deployment.
 
-1. Review `git status --short` and retain the user's in-progress landing-page/marketing changes.
-2. Finish or replace the browser smoke script; build/test changes only if it reveals a problem.
-3. Re-run `pnpm lint`, `pnpm test`, `pnpm typecheck`, and `pnpm --filter @sentinel/web build` after any edits.
-4. Keep work on the current branch. The user did not ask to commit or push; leave both for an explicit follow-up.
-5. Product roadmap status: Phases 0–3 are implemented locally; next planned work is Phase 4 gateway execution. Worker/D1 deployment, policy enforcement, and approval flows remain unimplemented.
+Product roadmap: Phase 6 is the visual policy builder using the existing rule format. Phase 7 adds durable human approval. Neither phase should silently expand execution eligibility or bypass the hosted storage release gate.
+
+## Verification and local tooling
+
+Final combined checks on 2026-09-29 passed: `pnpm lint`, `pnpm typecheck`, `pnpm test` (58 tests: 51 web, 4 policy-engine, 3 Worker), `pnpm build`, and local staging D1 migrations. The updated frozen lockfile was verified in the policy workstream. The web runner explicitly preloads `tsx`, so shared TypeScript tests do not depend on recent Node automatic type stripping.
+
+Recorded Chromium/HTTP smoke checks passed local signup → dashboard → logout → login, persistence across restart, tenant isolation, policy creation, default deny, deny/approval precedence, validation, allowed execution, deduplication, disabling, and exactly one outbound target request. Marketing was checked at 320/390/768 px with no horizontal overflow or browser exceptions. A temporary real Wrangler D1 binding also passed account creation, credential lookup, session resolution, and revocation. See [the work log](docs/work-log.md) for details. Temporary smoke servers were stopped; their data is not product data. No new runtime changes followed those smoke checks.
+
+The temporary Node Corepack installation is incomplete. The working local launcher is:
+
+```sh
+export PATH=/private/tmp/sentinel-phase5-bin:/private/tmp/node-v22.23.3-darwin-arm64/bin:$PATH
+pnpm --version
+```
+
+It runs pnpm 10.27.0 with Node 22.23.3. `node_modules` links to `/tmp/sentinel-pnpm-store/v10`; use `--store-dir /tmp/sentinel-pnpm-store` if reinstalling in this workspace. These temporary paths may disappear; a normal Node >=22.13 / pnpm 10.27.0 installation is the portable setup. See [environment notes](docs/environment.md).
+
+Future runtime changes require appropriate tests, lint, typecheck, build, and smoke verification. Do not assume GitHub CI passed merely because the local checks did.
